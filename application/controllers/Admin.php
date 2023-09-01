@@ -23,7 +23,8 @@ class Admin extends CI_Controller
 		$data['item'] = $this->db->get('tb_items')->num_rows();
 
 		$this->db->where('id_out >', 0);
-		$data['pinjam'] = $this->db->get('tb_pinjam')->num_rows();
+		$this->db->where('remark =', 'PINJAM');
+		$data['pinjam'] = $this->db->get('v_pinjam')->num_rows();
 
 
 		$this->db->where('id_retur >', 0);

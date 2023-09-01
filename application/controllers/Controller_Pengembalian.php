@@ -98,6 +98,7 @@ class Controller_Pengembalian extends CI_Controller
         $draw = intval($this->input->get("draw"));
         // $this->db->order_by("no_out", "desc");
         $this->db->where("employee_id", $employee_id);
+        $this->db->where("remark", "PINJAM");
         $this->db->where("status", 1);
         $query = $this->db->get("v_pinjam");
         $data = [];
@@ -113,8 +114,8 @@ class Controller_Pengembalian extends CI_Controller
             $row[] = $r->item_code;
             $row[] = $r->item_description;
 
-            if ($r->status == 1) {
-                $row[] = '<div class="text-danger">DIPINJAM</div>';
+            if ($r->remark == "PINJAM") {
+                $row[] = '<div class="text-danger">PINJAM</div>';
             } else {
                 $row[] = 'KEMBALI';
             }
