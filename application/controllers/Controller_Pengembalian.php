@@ -227,38 +227,44 @@ class Controller_Pengembalian extends CI_Controller
         date_default_timezone_set('Asia/Jakarta');
         if ($this->input->post('type') == 1) {
 
-            $data = [
-                'no_return' => $this->input->post('no_return'),
-                'date' => date('d-m-Y H:i:s'),
-                'employee_id' => $this->input->post('employee_id'),
-                'item_code' => $this->input->post('item_code'),
-                'no_out' => $this->input->post('no_pinjam'),
-                'remark' => '',
+            $no_id = $this->input->post('no_return');
+            $sql = $this->db->query("SELECT no_return FROM tb_pinjam where no_return = '$no_id' ");
+            $cek = $sql->num_rows();
+
+            if ($cek < 1) {
+                $data = [
+                    'no_return' => $this->input->post('no_return'),
+                    'date' => date('d-m-Y H:i:s'),
+                    'employee_id' => $this->input->post('employee_id'),
+                    'item_code' => $this->input->post('item_code'),
+                    'no_out' => $this->input->post('no_pinjam'),
+                    'remark' => '',
 
 
-            ];
+                ];
 
-            $this->db->insert('tb_kembali', $data);
-
-
-            $item_code = $this->input->post('item_code');
-            $this->db->set('status', '0');
-            $this->db->where('item_code', $item_code);
-            $this->db->update('tb_items');
+                $this->db->insert('tb_kembali', $data);
 
 
-            $no_out = $this->input->post('no_pinjam');
-            $no_retur = $this->input->post('no_return');
-            $this->db->set('remark', 'KEMBALI');
-            $this->db->set('no_return', $no_retur);
-            $this->db->set('date_ret', date('d-m-Y H:i:s'));
-            $this->db->where('no_out', $no_out);
-            $this->db->update('tb_pinjam');
+                $item_code = $this->input->post('item_code');
+                $this->db->set('status', '0');
+                $this->db->where('item_code', $item_code);
+                $this->db->update('tb_items');
 
 
-            echo json_encode(array(
-                "statusCode" => 200
-            ));
+                $no_out = $this->input->post('no_pinjam');
+                $no_retur = $this->input->post('no_return');
+                $this->db->set('remark', 'KEMBALI');
+                $this->db->set('no_return', $no_retur);
+                $this->db->set('date_ret', date('d-m-Y H:i:s'));
+                $this->db->where('no_out', $no_out);
+                $this->db->update('tb_pinjam');
+
+
+                echo json_encode(array(
+                    "statusCode" => 200
+                ));
+            }
         }
     }
 

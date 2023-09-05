@@ -212,32 +212,40 @@ class Controller_Peminjaman extends CI_Controller
     public function create_out_ajax()
     {
         date_default_timezone_set('Asia/Jakarta');
+
+
         if ($this->input->post('type') == 1) {
+            $no_id = $this->input->post('no_out');
+            $sql = $this->db->query("SELECT no_out FROM tb_pinjam where no_out = '$no_id' ");
+            $cek = $sql->num_rows();
 
-            $data = [
+            if ($cek < 1) {
 
-                'no_out' => $this->input->post('no_out'),
-                'date' => date('d-m-Y H:i:s'),
-                'employee_id' => $this->input->post('employee_id'),
-                'item_code' => $this->input->post('item_code'),
-                'remark' => 'PINJAM',
-                'no_return' => '',
-                'date_ret' => ''
+                $data = [
 
-            ];
+                    'no_out' => $this->input->post('no_out'),
+                    'date' => date('d-m-Y H:i:s'),
+                    'employee_id' => $this->input->post('employee_id'),
+                    'item_code' => $this->input->post('item_code'),
+                    'remark' => 'PINJAM',
+                    'no_return' => '',
+                    'date_ret' => ''
+
+                ];
 
 
-            $this->db->insert('tb_pinjam', $data);
+                $this->db->insert('tb_pinjam', $data);
 
 
-            $item_code = $this->input->post('item_code');
-            $this->db->set('status', '1');
-            $this->db->where('item_code', $item_code);
-            $this->db->update('tb_items');
+                $item_code = $this->input->post('item_code');
+                $this->db->set('status', '1');
+                $this->db->where('item_code', $item_code);
+                $this->db->update('tb_items');
 
-            echo json_encode(array(
-                "statusCode" => 200
-            ));
+                echo json_encode(array(
+                    "statusCode" => 200
+                ));
+            }
         }
     }
 

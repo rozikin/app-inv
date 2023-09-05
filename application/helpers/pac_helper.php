@@ -14,9 +14,9 @@ function is_logged_in()
 
         $querymenu = $ci->db->get_where('user_menu', ['menu' => $menu])->row_array();
 
-        $queryid = $querymenu['id']; 
+        $queryid = isset($querymenu['id']) ? $querymenu['id'] : 0;
 
-        $menu_id = $queryid ;
+        $menu_id = $queryid;
 
         $userAccess = $ci->db->get_where('user_access_menu', [
             'role_id' => $role_id,
@@ -28,7 +28,7 @@ function is_logged_in()
         }
     }
 
-    
+
     function check_access($role_id, $menu_id)
     {
         $ci = get_instance();
