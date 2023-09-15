@@ -20,6 +20,13 @@
 
       <!-- Main content -->
       <section class="content">
+
+          <div class="row">
+              <div class="container">
+                  <h3 class="text-center" id="jam"></h3>
+
+              </div>
+          </div>
           <div class="container-fluid">
               <!-- Small boxes (Stat box) -->
               <div class="row">
@@ -43,7 +50,6 @@
                       <div class="small-box bg-success">
                           <div class="inner">
                               <h3><?= $employee; ?></h3>
-
                               <p>Employee</p>
                           </div>
                           <div class="icon">
@@ -60,6 +66,8 @@
                               <h3><?= $pinjam; ?></h3>
 
                               <p>Peminjaman</p>
+
+
                           </div>
                           <div class="icon">
                               <i class="ion ion-stats-bars"></i>
@@ -86,6 +94,74 @@
               </div>
               <!-- /.row -->
 
+              <div class="card">
+                  <!-- /.card-header -->
+
+                  <div class="card-body">
+
+
+                      <table id="example6" class="table table-hover table-bordered table-sm" style="width:100%">
+                          <thead>
+                              <tr>
+                                  <th scope="col">#</th>
+                                  <th>NO PINJAM</th>
+                                  <th>DATE</th>
+                                  <th>NO KEMBALI</th>
+                                  <th>DATE KEMBALI</th>
+                                  <th>EMP ID</th>
+                                  <th>NAME</th>
+                                  <th>DEPT.</th>
+                                  <th>LINE.</th>
+                                  <th>ITEM CODE.</th>
+                                  <th>Desc.</th>
+                                  <th>STATUS</th>
+                              </tr>
+                          </thead>
+
+                      </table>
+
+                  </div>
+              </div>
           </div>
           <!-- /.content-wrapper -->
   </div>
+
+  <script>
+window.onload = function() {
+    jam();
+}
+
+function jam() {
+    var e = document.getElementById('jam'),
+        d = new Date(),
+        h, m, s;
+    h = d.getHours();
+    m = set(d.getMinutes());
+    s = set(d.getSeconds());
+
+    e.innerHTML = h + ':' + m + ':' + s;
+
+    setTimeout('jam()', 1000);
+}
+
+function set(e) {
+    e = e < 10 ? '0' + e : e;
+    return e;
+}
+
+
+$(document).ready(function() {
+    //call function show all product
+    table = $('#example6').DataTable({
+        "responsive": true,
+        "autoWidth": false,
+        "dom": 'Bfrtip',
+        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
+
+        "ajax": {
+            url: '<?php echo site_url('Admin/get_data_transaksi') ?>',
+            type: 'POST'
+        }
+    }).buttons().container().appendTo('#example6_wrapper .col-md-6:eq(0)');
+});
+  </script>

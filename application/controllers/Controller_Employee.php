@@ -15,7 +15,7 @@ class Controller_Employee extends CI_Controller
 
 	public function index()
 	{
-		$data['title'] = 'employee';
+		$data['title'] = 'Employee';
 		$data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
 		//konek model
 		$data['employee'] = $this->employee->get_employee();
@@ -399,6 +399,62 @@ class Controller_Employee extends CI_Controller
 
 		$this->load->view('administrator/employee/view_barcode_line', $data);
 	}
+
+
+
+	public function report()
+	{
+		$data['title'] = 'employee';
+		$data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+		//konek model
+
+		$data['employee'] = $this->employee->get_employee();
+
+		$this->load->view('template_oznet/header', $data);
+		$this->load->view('template_oznet/sidebar', $data);
+		$this->load->view('administrator/employee/report', $data);
+		$this->load->view('template_oznet/footer');
+	}
+
+	public function get_employee_report()
+	{
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+
+		$this->db->order_by("employee_id", "DESC");
+		$query = $this->db->get("tb_employee");
+		$data = [];
+		$no = 0;
+
+		foreach ($query->result() as $r) {
+			$no++;
+			$row = array();
+
+			$row[] = $no;
+			$row[] = $r->employee_id;
+			$row[] = $r->employee_name;
+			$row[] = $r->department;
+			$row[] = $r->linex;
+
+
+			$data[] = $row;
+		};
+
+		$result = array(
+			"draw" => $draw,
+			"recordsTotal" => $query->num_rows(),
+			"recordsFiltered" => $query->num_rows(),
+			"data" => $data
+		);
+
+		echo json_encode($result);
+		exit();
+	}
+
+
+
+
+
 
 
 

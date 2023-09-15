@@ -12,7 +12,7 @@ class Controller_Category extends CI_Controller
 
 	public function index()
 	{
-		$data['title'] = 'category';
+		$data['title'] = 'Category';
 		$data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
 		$data['category'] = $this->db->get('tb_category')->result_array();
 		$this->form_validation->set_rules('code_category', 'Code_Category', 'required');

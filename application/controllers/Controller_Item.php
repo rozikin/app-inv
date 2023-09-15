@@ -51,6 +51,7 @@ class Controller_Item extends CI_Controller
 			$row[] = $r->item_description;
 			$row[] = $r->name_category;
 			$row[] = $r->unit;
+			$row[] = $r->linex;
 			if ($r->remark)
 				$row[] = '<a href="' . base_url('./assets/images/item/' . $r->remark) . '" target="_blank"><img src="' . base_url('./assets/images/item/' . $r->remark) . '"/></a>';
 			else
@@ -198,6 +199,8 @@ class Controller_Item extends CI_Controller
 					$kode = $worksheet->getCellByColumnAndRow(0, $row)->getValue();
 					$description = $worksheet->getCellByColumnAndRow(1, $row)->getValue();
 					$linex = $worksheet->getCellByColumnAndRow(2, $row)->getValue();
+					$category = $worksheet->getCellByColumnAndRow(3, $row)->getValue();
+					$unit = $worksheet->getCellByColumnAndRow(4, $row)->getValue();
 					// $item = $worksheet->getCellByColumnAndRow(31, $row)->getValue();
 					// $sample_code = $worksheet->getCellByColumnAndRow(33, $row)->getValue();
 
@@ -224,9 +227,9 @@ class Controller_Item extends CI_Controller
 					$data[] = array(
 						'item_code'  => $kode,
 						'item_description'   => $description,
-						'id_category'  => 4,
+						'id_category'  => $category,
 						'id_supplier'  => 0,
-						'id_unit'  => 1,
+						'id_unit'  => $unit,
 						'remark'  => $image_name,
 						'linex'   => $linex,
 

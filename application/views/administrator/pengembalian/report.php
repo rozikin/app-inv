@@ -23,8 +23,8 @@
             <div class="row">
                 <div class="col-12">
                     <?php if (validation_errors()) : ?>
-                        <div class="alert alert-danger" role="alert">
-                            <?= validation_errors(); ?></div>
+                    <div class="alert alert-danger" role="alert">
+                        <?= validation_errors(); ?></div>
                     <?php endif; ?>
                     <?= $this->session->flashdata('message'); ?>
 
@@ -40,6 +40,7 @@
                                         <th scope="col">#</th>
                                         <th>NO KEMBALI</th>
                                         <th>DATE</th>
+                                        <th>NO OUT</th>
                                         <th>EMP ID</th>
                                         <th>NAME</th>
                                         <th>DEPT.</th>
@@ -69,18 +70,18 @@
 
 
 <script>
-    $(document).ready(function() {
-        //call function show all product
-        table = $('#example6').DataTable({
-            "responsive": true,
-            "autoWidth": false,
-            "dom": 'Bfrtip',
-            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
+$(document).ready(function() {
+    //call function show all product
+    table = $('#example6').DataTable({
+        "responsive": true,
+        "autoWidth": false,
+        "dom": 'Bfrtip',
+        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
 
-            "ajax": {
-                url: '<?php echo site_url('Controller_Pengembalian/get_data_report') ?>',
-                type: 'POST'
-            }
-        }).buttons().container().appendTo('#example6_wrapper .col-md-6:eq(0)');
-    });
+        "ajax": {
+            url: '<?php echo site_url('Controller_Pengembalian/get_data_report') ?>',
+            type: 'POST'
+        }
+    }).buttons().container().appendTo('#example6_wrapper .col-md-6:eq(0)');
+});
 </script>

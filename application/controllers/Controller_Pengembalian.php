@@ -152,8 +152,9 @@ class Controller_Pengembalian extends CI_Controller
 
 
         $draw = intval($this->input->get("draw"));
+        // $this->db->where('Date', date('d-m-Y'));
         $this->db->order_by("id_retur", "desc");
-        $query = $this->db->get("v_kembali");
+        $query = $this->db->get("v_kembali", 500);
         $data = [];
         $no = 0;
 
@@ -176,19 +177,19 @@ class Controller_Pengembalian extends CI_Controller
             $row[] = $r->item_description;
 
 
-            $row[] = '
+            // $row[] = '
 
-			<button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
-			Action
-			<span class="sr-only">Toggle Dropdown</span>
-			</button>
-			<div class="dropdown-menu" role="menu">
-					
-			<div class="dropdown-divider"></div>
-			
-			<a class="dropdown-item " onclick="delete_data(' . $r->id_retur . ')"><span class="fa fa-trash text-danger"></span> Delete</a>
-			</div>
-			';
+            // <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
+            // Action
+            // <span class="sr-only">Toggle Dropdown</span>
+            // </button>
+            // <div class="dropdown-menu" role="menu">
+
+            // <div class="dropdown-divider"></div>
+
+            // <a class="dropdown-item " onclick="delete_data(' . $r->id_retur . ')"><span class="fa fa-trash text-danger"></span> Delete</a>
+            // </div>
+            // ';
             $data[] = $row;
         };
 
@@ -225,46 +226,48 @@ class Controller_Pengembalian extends CI_Controller
     public function create_return_ajax()
     {
         date_default_timezone_set('Asia/Jakarta');
+        $nox =  $this->pengembalian->buat_kode_no_return();
+
         if ($this->input->post('type') == 1) {
 
             $no_id = $this->input->post('no_return');
-            $sql = $this->db->query("SELECT no_return FROM tb_pinjam where no_return = '$no_id' ");
-            $cek = $sql->num_rows();
+            // $sql = $this->db->query("SELECT no_return FROM tb_pinjam where no_return = '$no_id' ");
+            // $cek = $sql->num_rows();
 
-            if ($cek < 1) {
-                $data = [
-                    'no_return' => $this->input->post('no_return'),
-                    'date' => date('d-m-Y H:i:s'),
-                    'employee_id' => $this->input->post('employee_id'),
-                    'item_code' => $this->input->post('item_code'),
-                    'no_out' => $this->input->post('no_pinjam'),
-                    'remark' => '',
-
-
-                ];
-
-                $this->db->insert('tb_kembali', $data);
+            // if ($cek < 1) {
+            $data = [
+                'no_return' => $nox,
+                'date' => date('d-m-Y H:i:s'),
+                'employee_id' => $this->input->post('employee_id'),
+                'item_code' => $this->input->post('item_code'),
+                'no_out' => $this->input->post('no_pinjam'),
+                'remark' => '',
 
 
-                $item_code = $this->input->post('item_code');
-                $this->db->set('status', '0');
-                $this->db->where('item_code', $item_code);
-                $this->db->update('tb_items');
+            ];
+
+            $this->db->insert('tb_kembali', $data);
 
 
-                $no_out = $this->input->post('no_pinjam');
-                $no_retur = $this->input->post('no_return');
-                $this->db->set('remark', 'KEMBALI');
-                $this->db->set('no_return', $no_retur);
-                $this->db->set('date_ret', date('d-m-Y H:i:s'));
-                $this->db->where('no_out', $no_out);
-                $this->db->update('tb_pinjam');
+            $item_code = $this->input->post('item_code');
+            $this->db->set('status', '0');
+            $this->db->where('item_code', $item_code);
+            $this->db->update('tb_items');
 
 
-                echo json_encode(array(
-                    "statusCode" => 200
-                ));
-            }
+            $no_out = $this->input->post('no_pinjam');
+            $no_retur = $nox;
+            $this->db->set('remark', 'KEMBALI');
+            $this->db->set('no_return', $no_retur);
+            $this->db->set('date_ret', date('d-m-Y H:i:s'));
+            $this->db->where('no_out', $no_out);
+            $this->db->update('tb_pinjam');
+
+
+            echo json_encode(array(
+                "statusCode" => 200
+            ));
+            // }
         }
     }
 
@@ -360,6 +363,7 @@ class Controller_Pengembalian extends CI_Controller
 
             $row[] = $r->no_return;
             $row[] = $r->Date;
+            $row[] = $r->no_out;
             $row[] = $r->employee_id;
             $row[] = $r->employee_name;
             $row[] = $r->department;
@@ -379,6 +383,78 @@ class Controller_Pengembalian extends CI_Controller
         echo json_encode($result);
         exit();
     }
+
+
+    public function del_kembali()
+    {
+        $data['title'] = 'pengembalian';
+        $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+        $data['pinjam'] = $this->pengembalian->get_out();
+
+        $this->load->view('template_oznet/header', $data);
+        // $this->load->view('template_oznet/sidebar', $data);
+        $this->load->view('administrator/pengembalian/del_kembali', $data);
+        $this->load->view('template_oznet/footer');
+    }
+
+
+    public function get_data_return_del()
+    {
+        // Datatables Variables
+
+
+        $draw = intval($this->input->get("draw"));
+        $this->db->order_by("id_retur", "desc");
+        $query = $this->db->get("v_kembali");
+        $data = [];
+        $no = 0;
+
+
+        foreach ($query->result() as $r) {
+            $no++;
+
+            $row = array();
+
+            $row[] = $no;
+
+            $row[] = $r->no_return;
+            $row[] = $r->Date;
+            $row[] = $r->no_out;
+            $row[] = $r->employee_id;
+            $row[] = $r->employee_name;
+            $row[] = $r->department;
+            $row[] = $r->linex;
+            $row[] = $r->item_code;
+            $row[] = $r->item_description;
+
+
+            $row[] = '
+
+			<button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
+			Action
+			<span class="sr-only">Toggle Dropdown</span>
+			</button>
+			<div class="dropdown-menu" role="menu">
+					
+			<div class="dropdown-divider"></div>
+			
+			<a class="dropdown-item " onclick="delete_data(' . $r->id_retur . ')"><span class="fa fa-trash text-danger"></span> Delete</a>
+			</div>
+			';
+            $data[] = $row;
+        };
+
+        $result = array(
+            "draw" => $draw,
+            "recordsTotal" => $query->num_rows(),
+            "recordsFiltered" => $query->num_rows(),
+            "data" => $data
+        );
+
+        echo json_encode($result);
+        exit();
+    }
+
 
 
 

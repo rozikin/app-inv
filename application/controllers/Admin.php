@@ -22,6 +22,12 @@ class Admin extends CI_Controller
 		$this->db->where('id_item >', 0);
 		$data['item'] = $this->db->get('tb_items')->num_rows();
 
+		$this->db->where('status', 1);
+		$data['item_pinjam'] = $this->db->get('tb_items')->num_rows();
+
+
+
+
 		$this->db->where('id_out >', 0);
 		$this->db->where('remark =', 'PINJAM');
 		$data['pinjam'] = $this->db->get('v_pinjam')->num_rows();
@@ -134,5 +140,49 @@ class Admin extends CI_Controller
 	public function view_web()
 	{
 		redirect('client');
+	}
+
+
+	public function get_data_transaksi()
+	{
+
+		$draw = intval($this->input->get("draw"));
+		$this->db->where("remark", "PINJAM");
+		$this->db->order_by("id_out", "desc");
+		$query = $this->db->get("v_pinjam");
+		$data = [];
+		$no = 0;
+
+
+		foreach ($query->result() as $r) {
+			$no++;
+
+			$row = array();
+
+			$row[] = $no;
+
+			$row[] = $r->no_out;
+			$row[] = $r->date;
+			$row[] = $r->no_return;
+			$row[] = $r->date_ret;
+			$row[] = $r->employee_id;
+			$row[] = $r->employee_name;
+			$row[] = $r->department;
+			$row[] = $r->line;
+			$row[] = $r->item_code;
+			$row[] = $r->item_description;
+			$row[] = $r->remark == 'PINJAM' ? '<a class="badge badge-danger">' . $r->remark . '</a>' : '<a class="badge badge-success">' . $r->remark . '</a>';
+			$data[] = $row;
+		};
+
+		$result = array(
+			"draw" => $draw,
+			"recordsTotal" => $query->num_rows(),
+			"recordsFiltered" => $query->num_rows(),
+			"data" => $data
+		);
+
+		echo json_encode($result);
+		exit();
 	}
 }

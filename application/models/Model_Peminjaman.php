@@ -26,7 +26,6 @@ class Model_Peminjaman extends CI_Model
     }
 
 
-
     public function get_out()
     {
         $query = "SELECT * from v_pinjam order by id_out DESC";

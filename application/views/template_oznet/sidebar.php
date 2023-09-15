@@ -3,7 +3,8 @@
 
         <!-- Preloader -->
         <div class="preloader flex-column justify-content-center align-items-center">
-            <img class="animation__shake" src="<?= base_url('assets/'); ?>AdminLTE/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
+            <img class="animation__shake" src="<?= base_url('assets/'); ?>AdminLTE/dist/img/AdminLTELogo.png"
+                alt="AdminLTELogo" height="60" width="60">
         </div>
 
         <!-- Navbar -->
@@ -25,7 +26,8 @@
                     <div class="navbar-search-block">
                         <form class="form-inline">
                             <div class="input-group input-group-sm">
-                                <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
+                                <input class="form-control form-control-navbar" type="search" placeholder="Search"
+                                    aria-label="Search">
                                 <div class="input-group-append">
                                     <button class="btn btn-navbar" type="submit">
                                         <i class="fas fa-search"></i>
@@ -49,7 +51,8 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-widget="control-sidebar" data-controlsidebar-slide="true" href="#" role="button">
+                    <a class="nav-link" data-widget="control-sidebar" data-controlsidebar-slide="true" href="#"
+                        role="button">
                         <i class="fas fa-th-large"></i>
                     </a>
                 </li>
@@ -71,7 +74,8 @@
                 <!-- Sidebar user panel (optional) -->
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="image">
-                        <img src="<?= base_url('assets/'); ?>AdminLTE/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+                        <img src="<?= base_url('assets/'); ?>AdminLTE/dist/img/user2-160x160.jpg"
+                            class="img-circle elevation-2" alt="User Image">
                     </div>
                     <div class="info">
                         <a href="#" class="d-block"><?= $user['email'] ?></a>
@@ -82,7 +86,8 @@
 
                 <!-- Sidebar Menu -->
                 <nav class="mt-2">
-                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+                        data-accordion="false">
 
                         <?php
 
@@ -105,18 +110,18 @@
                         <!-- LOOPING MENU -->
 
                         <?php foreach ($menu as $m) : ?>
-                            <?php if ($this->uri->segment(1) == 'controller_item') {
-                            } ?>
+                        <!-- <?php if ($this->uri->segment(1) == 'controller_item') {
+                                    } ?> -->
 
-                            <li class="nav-item">
-                                <a href=" #" class="nav-link"><i class="<?= $m['icon']; ?> nav-icon"></i>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link"><i class="<?= $m['icon']; ?> nav-icon"></i>
 
-                                    <?= $m['menu']; ?>
-                                    <i class="fas fa-angle-left right "></i>
+                                <?= $m['menu']; ?>
+                                <i class="fas fa-angle-left right "></i>
 
-                                </a>
+                            </a>
 
-                                <?php
+                            <?php
                                 $menuid = $m['id'];
                                 $querysubmenu = "SELECT * FROM `v_menu` WHERE  `v_menu`.`menu_id` = $menuid AND `is_active` = 1 order by `title` ASC";
 
@@ -125,42 +130,42 @@
 
 
 
-                                <?php foreach ($submenu as $sm) : ?>
+                            <?php foreach ($submenu as $sm) : ?>
 
-                                    <?php if ($title == $sm['title']) : ?>
+                            <?php if ($title == $sm['title']) : ?>
 
-                                        <!-- <li class="nav-item menu-open"> -->
+                            <!-- <li class="nav-item menu-open"> -->
 
-                                        <ul class="nav nav-treeview">
+                            <ul class="nav nav-treeview">
 
-                                            <a href="<?= base_url($sm['url']); ?>" class="nav-link active">
-                                                <i class="<?= $sm['icon']; ?> nav-icon"></i>
-                                                <p><?= $sm['title']; ?></p>
-                                            </a>
-
-
-                                        </ul>
+                                <a href="<?= base_url($sm['url']); ?>" class="nav-link active">
+                                    <i class="<?= $sm['icon']; ?> nav-icon"></i>
+                                    <p><?= $sm['title']; ?></p>
+                                </a>
 
 
-
-                                    <?php else : ?>
-
-                                        <ul class="nav nav-treeview">
-                                            <li class="nav-item">
-                                                <a href="<?= base_url($sm['url']); ?>" class="nav-link">
-                                                    <i class="<?= $sm['icon']; ?> nav-icon"></i>
-                                                    <p><?= $sm['title']; ?></p>
-                                                </a>
-                                            </li>
-                                        </ul>
+                            </ul>
 
 
 
-                                    <?php endif; ?>
-                                <?php endforeach; ?>
+                            <?php else : ?>
 
-                            </li>
-                            <hr class="sidebar-divider mt-1 mb-1">
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="<?= base_url($sm['url']); ?>" class="nav-link">
+                                        <i class="<?= $sm['icon']; ?> nav-icon"></i>
+                                        <p><?= $sm['title']; ?></p>
+                                    </a>
+                                </li>
+                            </ul>
+
+
+
+                            <?php endif; ?>
+                            <?php endforeach; ?>
+
+                        </li>
+                        <hr class="sidebar-divider mt-1 mb-1">
 
 
                         <?php endforeach; ?>

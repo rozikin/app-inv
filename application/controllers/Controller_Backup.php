@@ -5,7 +5,7 @@ class Controller_Backup extends CI_Controller
 {
     public function index()
     {
-        $data["title"]         = "Backup Database Dengan CodeIgniter";
+        $data["title"]         = "Backup Db APP-inv";
         $this->load->view('backupdatabase', $data);
     }
 
@@ -16,11 +16,11 @@ class Controller_Backup extends CI_Controller
         $this->load->dbutil();
         $pref = [
             'format' => 'zip',
-            'filename' => 'blog.sql'
+            'filename' => 'db_app-inv.sql'
         ];
 
         $backup     = $this->dbutil->backup($pref);
-        $db_name    = 'backup_database__' . date("d-m-Y__H-i-s") . '.zip'; // nama backup dalam bentuk zip
+        $db_name    = 'backup_database_app-inv__' . date("d-m-Y__H-i-s") . '.zip'; // nama backup dalam bentuk zip
         $save       = './backup/db/' . $db_name; //folder tempat database disimpan
 
         $this->load->helper('file'); // load helper file
