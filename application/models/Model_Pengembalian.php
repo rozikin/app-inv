@@ -40,12 +40,6 @@ class Model_Pengembalian extends CI_Model
     }
 
 
-    function saverecords($no_in, $datex, $employee_id, $no_pinjam, $item_code, $remark)
-    {
-        $query = "INSERT INTO `tb_kembali`( `no_return`,`date`,`employee_id`,`no_out`, `item_code`, `remark`) VALUES ('$no_in', '$datex', '$employee_id',$no_pinjam, '$item_code', '$remark')";
-        return $this->db->query($query);
-    }
-
 
 
 
@@ -81,15 +75,34 @@ class Model_Pengembalian extends CI_Model
     }
 
 
+
     function get_data_kode($kode)
     {
-        $hsl = $this->db->query("SELECT * FROM tb_items WHERE item_code='$kode'");
+        $this->db->where("item_code", $kode);
+        $this->db->where("remark", "PINJAM");
+        // $this->db->where("status", 1);
+        $hsl = $this->db->get("tb_pinjam");
         if ($hsl->num_rows() > 0) {
             foreach ($hsl->result() as $data) {
+
+                $this->db->where('item_code', $data->item_code);
+                $xx = $this->db->get('tb_items');
+                $row_status = '';
+                $row_desc = '';
+
+
+
+                foreach ($xx->result() as $key) {
+                    $row_status .= $key->status;
+                    $row_desc .= $key->item_description;
+                };
+
+
                 $hasil = array(
                     'item_code' => $data->item_code,
-                    'item_description' => $data->item_description,
-                    'status' => $data->status,
+                    'item_description' => $row_desc,
+                    'status' => $row_status,
+                    'no_out' => $data->no_out,
 
                 );
             }

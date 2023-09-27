@@ -23,8 +23,8 @@
             <div class="row">
                 <div class="col-12">
                     <?php if (validation_errors()) : ?>
-                        <div class="alert alert-danger" role="alert">
-                            <?= validation_errors(); ?></div>
+                    <div class="alert alert-danger" role="alert">
+                        <?= validation_errors(); ?></div>
                     <?php endif; ?>
                     <div id="flash_data">
                         <?= $this->session->flashdata('message'); ?>
@@ -36,18 +36,17 @@
                     <div class="card">
                         <div class="card-header">
 
-                            <a href="<?= base_url(); ?>Controller_Employee/add_employee" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Add</a>
+                            <a href="<?= base_url(); ?>Controller_Employee/add_employee"
+                                class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Add</a>
                             <!-- <a href="<?= base_url(); ?>Controller_Employee/export3" class="btn btn-success btn-sm"><i class="fas fa-exprot"></i> Export Excel</a> -->
 
-                            <a href="<?= base_url(); ?>Controller_Employee/print" class="btn btn-info btn-sm"><i class="fas fa-exprot"></i> View Barcode</a>
-
+                            <a href="<?= base_url(); ?>Controller_Employee/print" class="btn btn-info btn-sm"><i
+                                    class="fas fa-exprot"></i> View Barcode</a>
 
 
                         </div>
                         <div class="col-5 mt-3">
-                            <form method="POST" action="<?= base_url('Controller_Employee/import') ?>" enctype="multipart/form-data">
-
-                                <!-- <form method="post" id="import_form" enctype="multipart/form-data"> -->
+                            <!-- <form method="POST" action="<?= base_url('Controller_Employee/import') ?>" enctype="multipart/form-data">
                                 <h6>Import from Excel</h6>
                                 <div class="input-group">
 
@@ -57,11 +56,9 @@
                                             file</label>
                                     </div>
                                     <div class="input-group-append">
-                                        <input type="submit" name="import" value="Import" class="btn btn-info btn-sm" />
-                                        <!-- <div class="ref btn btn-primary" id="ref">refresh</div> -->
                                     </div>
                                 </div>
-                            </form>
+                            </form> -->
                         </div>
 
                         <!-- /.card-header -->
@@ -104,97 +101,97 @@
 
 
 <script type="text/javascript">
-    var save_method; //for save method string
-    var table;
-    var base_url = '<?php echo base_url(); ?>';
+var save_method; //for save method string
+var table;
+var base_url = '<?php echo base_url(); ?>';
 
-    $(document).ready(function() {
-        //call function show all product
+$(document).ready(function() {
+    //call function show all product
 
-        table = $('#example1').DataTable({
-            "responsive": true,
-            // "lengthChange": false,
-            // "autoWidth": false,
-            // "dom": 'Bfrtip',
-            // "buttons": ["excel", "pdf", "print"],
+    table = $('#example1').DataTable({
+        "responsive": true,
+        // "lengthChange": false,
+        // "autoWidth": false,
+        // "dom": 'Bfrtip',
+        // "buttons": ["excel", "pdf", "print"],
 
-            "ajax": {
-                url: '<?php echo site_url('Controller_Employee/get_data') ?>',
-                type: 'POST'
-            }
+        "ajax": {
+            url: '<?php echo site_url('Controller_Employee/get_data_index') ?>',
+            type: 'POST'
+        }
 
 
-
-        });
 
     });
 
+});
 
-    $(function() {
-        bsCustomFileInput.init();
+
+$(function() {
+    bsCustomFileInput.init();
+});
+
+
+
+
+function add_data() {
+    save_method = 'add';
+    $('#form')[0].reset(); // reset form on modals
+    $('.form-group').removeClass('has-error'); // clear error class
+    $('.help-block').empty(); // clear error string
+    $('#modal_form').modal('show'); // show bootstrap modal
+    $('.modal-title').text('Add Data'); // Set Title to Bootstrap modal title
+    kd_otomatis();
+}
+
+
+function edit_data(id) {
+    var a = "<?php echo site_url('Controller_Employee/edit_employee') ?>/" + id;
+    window.location.assign(a);
+}
+
+
+function reload_table() {
+    table.ajax.reload(null, false); //reload datatable ajax 
+}
+
+
+window.setTimeout(function() {
+    $("#flash_data").fadeTo(500, 0).slideUp(500, function() {
+        $(this).remove();
     });
+}, 3000);
 
+function deleted(id) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
 
+            $.ajax({
+                url: "<?php echo site_url('Controller_Employee/remove') ?>/" + id,
+                type: "POST",
+                dataType: "JSON",
+                success: function(data) {
+                    //if success reload ajax table
+                    // Swal.fire(
+                    //     'Deleted!',
+                    //     'Your file has been deleted.',
+                    //     'success'
+                    // )
 
+                }
+            });
 
-    function add_data() {
-        save_method = 'add';
-        $('#form')[0].reset(); // reset form on modals
-        $('.form-group').removeClass('has-error'); // clear error class
-        $('.help-block').empty(); // clear error string
-        $('#modal_form').modal('show'); // show bootstrap modal
-        $('.modal-title').text('Add Data'); // Set Title to Bootstrap modal title
-        kd_otomatis();
-    }
+            window.location.reload();
 
-
-    function edit_data(id) {
-        var a = "<?php echo site_url('Controller_Employee/edit_employee') ?>/" + id;
-        window.location.assign(a);
-    }
-
-
-    function reload_table() {
-        table.ajax.reload(null, false); //reload datatable ajax 
-    }
-
-
-    window.setTimeout(function() {
-        $("#flash_data").fadeTo(500, 0).slideUp(500, function() {
-            $(this).remove();
-        });
-    }, 3000);
-
-    function deleted(id) {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-
-                $.ajax({
-                    url: "<?php echo site_url('Controller_Employee/remove') ?>/" + id,
-                    type: "POST",
-                    dataType: "JSON",
-                    success: function(data) {
-                        //if success reload ajax table
-                        // Swal.fire(
-                        //     'Deleted!',
-                        //     'Your file has been deleted.',
-                        //     'success'
-                        // )
-
-                    }
-                });
-
-                window.location.reload();
-
-            }
-        })
-    }
+        }
+    })
+}
 </script>

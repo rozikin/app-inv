@@ -13,34 +13,254 @@ class Admin extends CI_Controller
 	//menampilkan halaman utama
 	public function index()
 	{
-		$data['title'] = 'Dashboard';
+		$data['title'] = 'index';
 		$data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
 
-		$this->db->where('id >', 0);
-		$data['employee'] = $this->db->get('tb_employee')->num_rows();
-
-		$this->db->where('id_item >', 0);
-		$data['item'] = $this->db->get('tb_items')->num_rows();
-
-		$this->db->where('status', 1);
-		$data['item_pinjam'] = $this->db->get('tb_items')->num_rows();
-
-
-
-
-		$this->db->where('id_out >', 0);
-		$this->db->where('remark =', 'PINJAM');
-		$data['pinjam'] = $this->db->get('v_pinjam')->num_rows();
-
-
-		$this->db->where('id_retur >', 0);
-		$data['retur'] = $this->db->get('tb_kembali')->num_rows();
 
 		$this->load->view('template_oznet/header', $data);
 		$this->load->view('template_oznet/sidebar', $data);
-		$this->load->view('administrator/admin/index', $data);
+		$this->load->view('administrator/admin/index');
 		$this->load->view('template_oznet/footer');
 	}
+
+
+	public function dashboard()
+	{
+		$data['title'] = 'Dashboard';
+		$data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+
+
+		$this->load->view('template_oznet/header', $data);
+		$this->load->view('template_oznet/sidebar', $data);
+		$this->load->view('administrator/admin/dashboard');
+		$this->load->view('template_oznet/footer');
+	}
+
+	function get_data_employee()
+	{
+
+		$this->db->where('id >', 0);
+		$data = $this->db->get('tb_employee')->num_rows();
+
+		$message = $data;
+
+		echo json_encode(array("message" => $message));
+	}
+
+
+	function get_data_item()
+	{
+
+
+		$data = $this->db->get('tb_items')->num_rows();
+
+		$message = $data;
+
+		echo json_encode(array("message" => $message));
+	}
+
+	function get_data_peminjaman()
+	{
+
+
+		// date_default_timezone_set('Asia/Jakarta');
+
+		// $this->db->where('date >', date('d-m-Y 00:00:00'));
+		// $this->db->where('date <', date('d-m-Y 24:00:00'));
+		$this->db->where('remark', 'PINJAM');
+		$data = $this->db->get('tb_pinjam')->num_rows();
+
+		$message = $data;
+
+		echo json_encode(array("message" => $message));
+	}
+
+	function get_data_item_peminjaman()
+	{
+
+
+		// date_default_timezone_set('Asia/Jakarta');
+
+		// $this->db->where('date >', date('d-m-Y 00:00:00'));
+		// $this->db->where('date <', date('d-m-Y 24:00:00'));
+		$this->db->where('status', 1);
+		$data = $this->db->get('tb_items')->num_rows();
+
+		$message = $data;
+
+		echo json_encode(array("message" => $message));
+	}
+
+
+	function get_data_pinjam_hari_ini()
+	{
+
+
+		date_default_timezone_set('Asia/Jakarta');
+
+		$this->db->where('date >', date('d-m-Y 00:00:00'));
+		$this->db->where('date <', date('d-m-Y 24:00:00'));
+		$this->db->where('remark', 'PINJAM');
+		$data = $this->db->get('tb_pinjam')->num_rows();
+
+		$message = $data;
+
+		echo json_encode(array("message" => $message));
+	}
+
+
+	function get_data_kembali_hari_ini()
+	{
+
+
+		date_default_timezone_set('Asia/Jakarta');
+
+		$this->db->where('date >', date('d-m-Y 00:00:00'));
+		$this->db->where('date <', date('d-m-Y 24:00:00'));
+		// $this->db->where('remark', 'PINJAM');
+		$data = $this->db->get('tb_kembali')->num_rows();
+
+		$message = $data;
+
+		echo json_encode(array("message" => $message));
+	}
+
+
+
+
+
+	function get_ct_sweing()
+	{
+
+
+		date_default_timezone_set('Asia/Jakarta');
+
+		$this->db->where('date >', date('d-m-Y 00:00:00'));
+		$this->db->where('date <', date('d-m-Y 24:00:00'));
+		$this->db->like('remark', 'PINJAM');
+		$this->db->like('item_code', 'SEW');
+		$data = $this->db->get('tb_pinjam')->num_rows();
+
+		$message = '<h6>' . $data . '</h6>';
+
+		echo json_encode(array("message" => $message));
+	}
+
+	function get_ct_qc()
+	{
+
+
+		date_default_timezone_set('Asia/Jakarta');
+
+		$this->db->where('date >', date('d-m-Y 00:00:00'));
+		$this->db->where('date <', date('d-m-Y 24:00:00'));
+		$this->db->like('remark', 'PINJAM');
+		$this->db->like('item_code', 'QC');
+		$data = $this->db->get('tb_pinjam')->num_rows();
+
+		$message = '<h6>' . $data . '</h6>';
+
+		echo json_encode(array("message" => $message));
+	}
+
+	function get_ct_packing()
+	{
+
+
+		date_default_timezone_set('Asia/Jakarta');
+
+		$this->db->where('date >', date('d-m-Y 00:00:00'));
+		$this->db->where('date <', date('d-m-Y 24:00:00'));
+		$this->db->like('remark', 'PINJAM');
+		$this->db->like('item_code', 'PACK');
+		$data = $this->db->get('tb_pinjam')->num_rows();
+
+		$messagex = '<h6>' . $data . '</h6>';
+
+		echo json_encode(array("message" => $messagex));
+	}
+
+	function get_ct_cutting()
+	{
+
+
+		date_default_timezone_set('Asia/Jakarta');
+
+		$this->db->where('date >', date('d-m-Y 00:00:00'));
+		$this->db->where('date <', date('d-m-Y 24:00:00'));
+		$this->db->like('remark', 'PINJAM');
+		$this->db->like('item_code', 'CUT');
+		$data = $this->db->get('tb_pinjam')->num_rows();
+
+		$messagey = '<h6>' . $data . '</h6>';
+
+		echo json_encode(array("message" => $messagey));
+	}
+	function get_ct_mekanik()
+	{
+
+
+		date_default_timezone_set('Asia/Jakarta');
+
+		$this->db->where('date >', date('d-m-Y 00:00:00'));
+		$this->db->where('date <', date('d-m-Y 24:00:00'));
+		$this->db->like('remark', 'PINJAM');
+		$this->db->like('item_code', 'MEK');
+		$data = $this->db->get('tb_pinjam')->num_rows();
+
+		$message = '<h6>' . $data . '</h6>';
+
+		echo json_encode(array("message" => $message));
+	}
+	function get_ct_sample()
+	{
+
+
+		date_default_timezone_set('Asia/Jakarta');
+
+		$this->db->where('date >', date('d-m-Y 00:00:00'));
+		$this->db->where('date <', date('d-m-Y 24:00:00'));
+		$this->db->like('remark', 'PINJAM');
+		$this->db->like('item_code', 'SPL');
+		$data = $this->db->get('tb_pinjam')->num_rows();
+
+		$message = '<h6>' . $data . '</h6>';
+
+		echo json_encode(array("message" => $message));
+	}
+	function get_ct_wh()
+	{
+
+
+		date_default_timezone_set('Asia/Jakarta');
+
+		$this->db->where('date >', date('d-m-Y 00:00:00'));
+		$this->db->where('date <', date('d-m-Y 24:00:00'));
+		$this->db->like('remark', 'PINJAM');
+		$this->db->like('item_code', 'WH');
+		$data = $this->db->get('tb_pinjam')->num_rows();
+
+		$message = '<h6>' . $data . '</h6>';
+
+		echo json_encode(array("message" => $message));
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	public function role()
 	{
@@ -146,13 +366,17 @@ class Admin extends CI_Controller
 	public function get_data_transaksi()
 	{
 
+		date_default_timezone_set('Asia/Jakarta');
+
 		$draw = intval($this->input->get("draw"));
-		$this->db->where("remark", "PINJAM");
+
+		$this->db->where('date >', date('d-m-Y 00:00:00'));
+		$this->db->where('date <', date('d-m-Y 24:00:00'));
+		$this->db->where('remark', 'PINJAM');
 		$this->db->order_by("id_out", "desc");
-		$query = $this->db->get("v_pinjam");
+		$query = $this->db->get("tb_pinjam");
 		$data = [];
 		$no = 0;
-
 
 		foreach ($query->result() as $r) {
 			$no++;
@@ -166,11 +390,11 @@ class Admin extends CI_Controller
 			$row[] = $r->no_return;
 			$row[] = $r->date_ret;
 			$row[] = $r->employee_id;
-			$row[] = $r->employee_name;
-			$row[] = $r->department;
-			$row[] = $r->line;
+			// $row[] = $r->employee_name;
+			// $row[] = $r->department;
+			// $row[] = $r->line;
 			$row[] = $r->item_code;
-			$row[] = $r->item_description;
+			// $row[] = $r->item_description;
 			$row[] = $r->remark == 'PINJAM' ? '<a class="badge badge-danger">' . $r->remark . '</a>' : '<a class="badge badge-success">' . $r->remark . '</a>';
 			$data[] = $row;
 		};

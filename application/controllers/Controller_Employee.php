@@ -21,10 +21,75 @@ class Controller_Employee extends CI_Controller
 		$data['employee'] = $this->employee->get_employee();
 
 		$this->load->view('template_oznet/header', $data);
-		$this->load->view('template_oznet/sidebar', $data);
+		$this->load->view('template_oznet/sidebar');
 		$this->load->view('administrator/employee/index', $data);
 		$this->load->view('template_oznet/footer');
 	}
+
+	public function Import_Employee()
+	{
+		$data['title'] = 'Employee';
+		$data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+		//konek model
+		$data['employee'] = $this->employee->get_employee();
+
+		$this->load->view('template_oznet/header', $data);
+		$this->load->view('template_oznet/sidebar', $data);
+		$this->load->view('administrator/employee/index_import', $data);
+		$this->load->view('template_oznet/footer');
+	}
+
+	public function get_data_index()
+	{
+		$draw = intval($this->input->get("draw"));
+
+		$this->db->order_by("id", "desc");
+		// $this->db->where("employee_id >", 0);
+		$query = $this->db->get("tb_employee");
+		$data = [];
+		$no = 0;
+
+		foreach ($query->result() as $r) {
+			$no++;
+			$row = array();
+			$row[] = $no;
+			$row[] = $r->employee_id;
+			$row[] = $r->employee_name;
+			$row[] = $r->department;
+			$row[] = $r->linex;
+			if ($r->remark)
+				$row[] = '<a href="' . base_url('./assets/images/employee/' . $r->remark) . '" target="_blank"><img src="' . base_url('./assets/images/employee/' . $r->remark) . '"/></a>';
+			else
+				$row[] = '(No barcode)';
+
+			$row[] = '
+
+			<button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
+			Action
+	  		<span class="sr-only">Toggle Dropdown</span>
+			</button>
+			<div class="dropdown-menu" role="menu">
+		
+	  		<a class="dropdown-item" onclick="edit_data(' . "'" . $r->id . "'" . ')"><span class="fa fa-edit text-primary"></span> Edit</a>
+	  		<div class="dropdown-divider"></div>
+	  	
+			</div>
+			';
+			$data[] = $row;
+		};
+
+		$result = array(
+			"draw" => $draw,
+			"recordsTotal" => $query->num_rows(),
+			"recordsFiltered" => $query->num_rows(),
+			"data" => $data
+		);
+
+		echo json_encode($result);
+		exit();
+	}
+
+
 
 	public function get_data()
 	{

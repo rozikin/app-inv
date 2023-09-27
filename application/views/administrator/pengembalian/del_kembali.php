@@ -30,85 +30,64 @@
 
 
                 <div class="card">
-                    <div class="card-body">
 
-                        <form id="form-user">
-                            <div class="row invoice-info mt-1">
-                                <div class="container">
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <div class="form-group row mb-1">
-                                                <label for="no_sj" class="col-sm-1 col-form-label">NO KMBL</label>
-                                                <div class="col-2">
+                    <div class="container mt-5">
 
-                                                    <input type="hidden" class="form-control form-control-sm"
-                                                        id="id_return" name="id_return" required>
-                                                    <input type="text" class="form-control form-control-sm"
-                                                        id="no_return" name="no_return">
-                                                </div>
+                        <div class="row">
 
 
+                            <div class="col-md-5">
 
-                                                <label for="employee_id" class="col-sm-1 col-form-label">NIK</label>
-                                                <div class="col-2">
-                                                    <input type="text" class="form-control form-control-sm"
-                                                        id="employee_id" name="employee_id" required autofocus>
-                                                    <div class="box-login">
-                                                        <input type="text" class="form-control form-control-sm"
-                                                            id="employee_name" name="employee_name">
-                                                    </div>
-
-                                                </div>
-
-
-                                                <label for="no_pinjam" class="col-sm-1 col-form-label">NO PJM</label>
-                                                <div class="col-2">
-                                                    <input type="text" class="form-control form-control-sm"
-                                                        id="no_pinjam" name="no_pinjam" onclick="cari_pinjam()" required
-                                                        autofocus>
-
-                                                </div>
-
-                                                <label for="item_code" class="col-sm-1 col-form-label">ITEM</label>
-                                                <div class="col-sm-2">
-                                                    <input type="text" class="form-control form-control-sm"
-                                                        id="item_code" name="item_code" required>
-                                                    <div class="box-login">
-                                                        <input type="text" class="form-control form-control-sm "
-                                                            id="item_description" name="item_description">
-                                                    </div>
-                                                    <div class="box-login">
-                                                        <input type="text" class="form-control form-control-sm "
-                                                            id="status" name="status">
-                                                    </div>
+                                <div class="form-group row mb-1">
+                                    <label for="reservationdatetime" class="col-sm-4 col-form-label">From </label>
+                                    <div class="col-sm-5">
+                                        <!-- Date -->
+                                        <div class="input-group date" id="reservationdate" data-target-input="nearest">
+                                            <input type="text" class="form-control datetimepicker-input"
+                                                data-target="#reservationdate" id="from_transaksi"
+                                                name="from_transaksi" />
+                                            <div class="input-group-append" data-target="#reservationdate"
+                                                data-toggle="datetimepicker">
+                                                <div class="input-group-text"><i class="fa fa-calendar"></i>
                                                 </div>
                                             </div>
-
-                                            <a class="btn btn-success btn-sm float-left mr-2" data-widget="fullscreen"
-                                                href="#" role="button">
-                                                full-screen
-                                            </a>
-                                            <button type="submit" id="simpan" class="btn btn-primary btn-sm float-left"
-                                                style="margin-right: 5px;">
-                                                <i class="fas fa-download"></i> Save
-                                            </button>
-                                            <a href="<?= base_url('admin'); ?>" class="btn btn-danger btn-sm">back</a>
-
-
-
                                         </div>
                                     </div>
 
                                 </div>
+                            </div>
 
-                                <div class="row no-print">
-                                    <div class="col-12">
-
-
-
+                            <div class="col-5">
+                                <div class="form-group row mb-1">
+                                    <label for="reservationdatetime" class="col-sm-4 col-form-label"> To</label>
+                                    <div class="col-sm-5">
+                                        <!-- Date -->
+                                        <div class="input-group date" id="reservationdate1" data-target-input="nearest">
+                                            <input type="text" class="form-control datetimepicker-input"
+                                                data-target="#reservationdate1" id="to_transaksi" name="to_transaksi" />
+                                            <div class="input-group-append" data-target="#reservationdate1"
+                                                data-toggle="datetimepicker">
+                                                <div class="input-group-text"><i class="fa fa-calendar"></i>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                        </form>
+
+                            </div>
+
+                            <div class="col-1">
+                                <button class="btn btn-primary text-left" id="cari_transaksi">pilih</button>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="card-body">
+
+
                     </div>
                 </div>
 
@@ -153,47 +132,6 @@
 
 
 
-<!-- Modal -->
-<div class="modal fade" id="modal_form_pinjam" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Form</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-
-
-            <div class="modal-body form">
-                <form action="#" id="form" class="form-horizontal">
-
-                    <div class="table-responsive">
-                        <div class="container">
-
-
-                            <table id="example_pinjam" class="table table-hover table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>No out</th>
-                                        <th>Date</th>
-                                        <th>Item Code</th>
-                                        <th>Desc</th>
-                                        <th>Desc</th>
-                                        <th>Desc</th>
-                                    </tr>
-                                </thead>
-
-                            </table>
-                        </div>
-                    </div>
-
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
 
 
 
@@ -227,7 +165,6 @@ function set(e) {
     return e;
 }
 
-kd_otomatis_no_return();
 
 function reload_table() {
     table.ajax.reload(null, false); //reload datatable ajax 
@@ -303,6 +240,72 @@ $(document).on('click', '.pilih_data', function(e) {
 
 
 
+$(document).ready(function() {
+
+    $("#cari_transaksi").click(function() {
+
+        cari_transaksi();
+
+    })
+
+});
+
+
+
+function cari_transaksi() {
+
+
+    var from_trans = $('#from_transaksi').val();
+    var to_trans = $('#to_transaksi').val();
+
+    console.log(from_trans);
+    console.log(to_trans);
+
+    table = $('#example1').DataTable({
+        "responsive": true,
+        destroy: true,
+
+        "autoWidth": false,
+        destroy: true,
+
+        "dom": 'Bfrtip',
+        "buttons": ["csv", "excel", "pdf", "print", "colvis"],
+
+
+        "ajax": {
+            url: '<?php echo site_url('Controller_Pengembalian/get_data_return_del') ?>',
+            data: {
+
+                from_transaksi: from_trans,
+                to_transaksi: to_trans
+            },
+            type: 'POST'
+        }
+
+    }).buttons().container().appendTo('#example6_wrapper .col-md-6:eq(0)');
+
+
+
+
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function delete_data(id) {
     var pc = document.getElementById('employee_id');
     Swal.fire({
@@ -326,8 +329,7 @@ function delete_data(id) {
                 }
             });
 
-            reload_table();
-            kd_otomatis_no_return();
+            cari_transaksi();
             pc.focus();
 
         }
@@ -335,20 +337,7 @@ function delete_data(id) {
 }
 
 
-$(document).ready(function() {
-    table = $('#example1').DataTable({
-        "responsive": true,
 
-        "ajax": {
-            url: '<?php echo site_url('Controller_Pengembalian/get_data_return_del') ?>',
-            type: 'POST'
-        }
-
-    });
-
-
-    $('#simpan').prop('disabled', true);
-});
 
 function reload_table() {
     table.ajax.reload(null, false); //reload datatable ajax 
@@ -424,43 +413,6 @@ $(document).ready(function() {
 
     var px = document.getElementById('item_code');
     var pl = document.getElementById('remark');
-
-
-
-    // px.onchange = function() {
-    //     var item_code = $(this).val();
-
-    //     $.ajax({
-    //         type: "POST",
-    //         url: "<?php echo site_url('Controller_Pengembalian/get_data_kode') ?>/",
-    //         dataType: "JSON",
-    //         data: {
-    //             item_code: item_code
-    //         },
-    //         cache: false,
-    //         success: function(data) {
-    //             $.each(data, function(item_code, item_description) {
-    //                 $('[name="item_description"]').val(data.item_description);
-
-    //                 if (data.status == 1) {
-    //                     $('[name="status"]').val('OUT');
-    //                 } else {
-    //                     $('[name="status"]').val('');
-    //                 }
-    //             });
-
-    //             $('#simpan').prop('disabled', false);
-    //             $('#simpan').click();
-
-    //         },
-    //         error: function() {
-    //             toastr.error('data item tidak ditemukan!')
-    //             px.focus();
-
-    //         }
-    //     });
-    // }
-
 
 
 

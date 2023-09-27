@@ -11,12 +11,6 @@ class Controller_Pengembalian extends CI_Controller
     }
 
 
-    // public function kode_otomatis_kembali()
-    // {
-    //     $data =  $this->pengembalian->buat_kode_out();
-    //     echo json_encode($data);
-    // }
-
     public function kode_otomatis_no_return()
     {
         $data =  $this->pengembalian->buat_kode_no_return();
@@ -29,11 +23,11 @@ class Controller_Pengembalian extends CI_Controller
     {
         $data['title'] = 'pengembalian';
         $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
-        $data['pinjam'] = $this->pengembalian->get_out();
+        // $data['pinjam'] = $this->pengembalian->get_out();
 
         $this->load->view('template_oznet/header', $data);
         // $this->load->view('template_oznet/sidebar', $data);
-        $this->load->view('administrator/pengembalian/index', $data);
+        $this->load->view('administrator/pengembalian/index');
         $this->load->view('template_oznet/footer');
     }
 
@@ -47,27 +41,48 @@ class Controller_Pengembalian extends CI_Controller
 
     public function get_data_return_all()
     {
-        // Datatables Variables
 
         $draw = intval($this->input->get("draw"));
+
+
         $this->db->order_by("id_retur", "desc");
-        $query = $this->db->get("v_kembali");
+        $query = $this->db->get("tb_kembali");
         $data = [];
         $no = 0;
 
         foreach ($query->result() as $r) {
-            $no++;
+            $this->db->where('employee_id', $r->employee_id);
+            $xx = $this->db->get('tb_employee');
+            $this->db->where('item_code', $r->item_code);
+            $s = $this->db->get('tb_items');
 
+            $row_item_desc = '';
+            $row_name = '';
+            $row_department = '';
+            $row_line = '';
+
+            $no++;
             $row = array();
             $row[] = $no;
             $row[] = $r->no_return;
-            $row[] = $r->Date;
+            $row[] = $r->date;
+            $row[] = $r->no_out;
             $row[] = $r->employee_id;
-            $row[] = $r->employee_name;
-            $row[] = $r->department;
-            $row[] = $r->linex;
+            foreach ($xx->result() as $key) {
+                $row_name .= $key->employee_name;
+                $row_department .= $key->department;
+                $row_line .= $key->linex;
+            };
+
+            $row[] = $row_name;
+            $row[] = $row_department;
+            $row[] = $row_line;
             $row[] = $r->item_code;
-            $row[] = $r->item_description;
+            foreach ($s->result() as $key) {
+                $row_item_desc .= $key->item_description;
+            };
+
+            $row[] = $row_item_desc;
 
 
             $data[] = $row;
@@ -92,49 +107,47 @@ class Controller_Pengembalian extends CI_Controller
         echo json_encode($data);
     }
 
-    function get_data_pinjam($employee_id)
-    {
-        $kode = $this->input->post('employee_id');
-        $draw = intval($this->input->get("draw"));
-        // $this->db->order_by("no_out", "desc");
-        $this->db->where("employee_id", $employee_id);
-        $this->db->where("remark", "PINJAM");
-        $this->db->where("status", 1);
-        $query = $this->db->get("v_pinjam");
-        $data = [];
-        $no = 0;
+    // function get_data_pinjam($employee_id)
+    // {
+    //     $kode = $this->input->post('employee_id');
+    //     $draw = intval($this->input->get("draw"));
+    //     $this->db->where("employee_id", $employee_id);
+    //     $this->db->where("remark", "PINJAM");
+    //     $this->db->where("status", 1);
+    //     $query = $this->db->get("v_pinjam");
+    //     $data = [];
+    //     $no = 0;
 
-        foreach ($query->result() as $r) {
-            $no++;
+    //     foreach ($query->result() as $r) {
+    //         $no++;
 
-            $row = array();
-            $row[] = $no;
-            $row[] = $r->no_out;
-            $row[] = $r->date;
-            $row[] = $r->item_code;
-            $row[] = $r->item_description;
+    //         $row = array();
+    //         $row[] = $no;
+    //         $row[] = $r->no_out;
+    //         $row[] = $r->date;
+    //         $row[] = $r->item_code;
+    //         $row[] = $r->item_description;
 
-            if ($r->remark == "PINJAM") {
-                $row[] = '<div class="text-danger">PINJAM</div>';
-            } else {
-                $row[] = 'KEMBALI';
-            }
+    //         if ($r->remark == "PINJAM") {
+    //             $row[] = '<div class="text-danger">PINJAM</div>';
+    //         } else {
+    //             $row[] = 'KEMBALI';
+    //         }
 
-            $row[] = '<a class="pilih_data btn-sm" data-id="' . $r->no_out . '" data-code="' . $r->item_code . '" data-desc="' . $r->item_description . '" data-status="' . $r->status . '">' . 'select' . '</a>';
-            $data[] = $row;
-        };
+    //         $row[] = '<a class="pilih_data btn-sm" data-id="' . $r->no_out . '" data-code="' . $r->item_code . '" data-desc="' . $r->item_description . '" data-status="' . $r->status . '">' . 'select' . '</a>';
+    //         $data[] = $row;
+    //     };
 
-        $result = array(
-            "draw" => $draw,
-            "recordsTotal" => $query->num_rows(),
-            "recordsFiltered" => $query->num_rows(),
-            "data" => $data
-        );
+    //     $result = array(
+    //         "draw" => $draw,
+    //         "recordsTotal" => $query->num_rows(),
+    //         "recordsFiltered" => $query->num_rows(),
+    //         "data" => $data
+    //     );
 
-        echo json_encode($result);
-        exit();
-    }
-
+    //     echo json_encode($result);
+    //     exit();
+    // }
 
 
 
@@ -148,48 +161,54 @@ class Controller_Pengembalian extends CI_Controller
 
     public function get_data_return()
     {
-        // Datatables Variables
-
+        date_default_timezone_set('Asia/Jakarta');
 
         $draw = intval($this->input->get("draw"));
-        // $this->db->where('Date', date('d-m-Y'));
+
+        $this->db->where('date >', date('d-m-Y 00:00:00'));
+        $this->db->where('date <', date('d-m-Y 24:00:00'));
         $this->db->order_by("id_retur", "desc");
-        $query = $this->db->get("v_kembali", 500);
+        $query = $this->db->get("tb_kembali");
         $data = [];
         $no = 0;
 
 
         foreach ($query->result() as $r) {
+            $this->db->where('employee_id', $r->employee_id);
+            $xx = $this->db->get('tb_employee');
+            $this->db->where('item_code', $r->item_code);
+            $s = $this->db->get('tb_items');
+
+            $row_item_desc = '';
+            $row_name = '';
+            $row_department = '';
+            $row_line = '';
+
+
             $no++;
-
             $row = array();
-
             $row[] = $no;
-
             $row[] = $r->no_return;
-            $row[] = $r->Date;
+            $row[] = $r->date;
             $row[] = $r->no_out;
             $row[] = $r->employee_id;
-            $row[] = $r->employee_name;
-            $row[] = $r->department;
-            $row[] = $r->linex;
+            foreach ($xx->result() as $key) {
+                $row_name .= $key->employee_name;
+                $row_department .= $key->department;
+                $row_line .= $key->linex;
+            };
+
+            $row[] = $row_name;
+            $row[] = $row_department;
+            $row[] = $row_line;
             $row[] = $r->item_code;
-            $row[] = $r->item_description;
+            foreach ($s->result() as $key) {
+                $row_item_desc .= $key->item_description;
+            };
+
+            $row[] = $row_item_desc;
 
 
-            // $row[] = '
-
-            // <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
-            // Action
-            // <span class="sr-only">Toggle Dropdown</span>
-            // </button>
-            // <div class="dropdown-menu" role="menu">
-
-            // <div class="dropdown-divider"></div>
-
-            // <a class="dropdown-item " onclick="delete_data(' . $r->id_retur . ')"><span class="fa fa-trash text-danger"></span> Delete</a>
-            // </div>
-            // ';
             $data[] = $row;
         };
 
@@ -230,47 +249,52 @@ class Controller_Pengembalian extends CI_Controller
 
         if ($this->input->post('type') == 1) {
 
-            $no_id = $this->input->post('no_return');
-            // $sql = $this->db->query("SELECT no_return FROM tb_pinjam where no_return = '$no_id' ");
-            // $cek = $sql->num_rows();
+            $no_id = $this->input->post('employee_id');
+            $sql = $this->db->query("SELECT employee_id FROM tb_pinjam where employee_id = '$no_id' ");
+            $cek = $sql->num_rows();
 
-            // if ($cek < 1) {
-            $data = [
-                'no_return' => $nox,
-                'date' => date('d-m-Y H:i:s'),
-                'employee_id' => $this->input->post('employee_id'),
-                'item_code' => $this->input->post('item_code'),
-                'no_out' => $this->input->post('no_pinjam'),
-                'remark' => '',
+            $no_item = $this->input->post('item_code');
+            $sqlx = $this->db->query("SELECT item_code FROM tb_pinjam where item_code = '$no_item' ");
+            $cek2 = $sqlx->num_rows();
+
+            if ($cek > 0  && $cek2 > 0) {
 
 
-            ];
-
-            $this->db->insert('tb_kembali', $data);
-
-
-            $item_code = $this->input->post('item_code');
-            $this->db->set('status', '0');
-            $this->db->where('item_code', $item_code);
-            $this->db->update('tb_items');
+                $item_code = $this->input->post('item_code');
+                $this->db->set('status', 0);
+                $this->db->where('item_code', $item_code);
+                $this->db->update('tb_items');
 
 
-            $no_out = $this->input->post('no_pinjam');
-            $no_retur = $nox;
-            $this->db->set('remark', 'KEMBALI');
-            $this->db->set('no_return', $no_retur);
-            $this->db->set('date_ret', date('d-m-Y H:i:s'));
-            $this->db->where('no_out', $no_out);
-            $this->db->update('tb_pinjam');
+                $no_out = $this->input->post('no_pinjam');
+                $no_retur = $nox;
+                $this->db->set('remark', 'KEMBALI');
+                $this->db->set('no_return', $no_retur);
+                $this->db->set('date_ret', date('d-m-Y H:i:s'));
+                $this->db->where('no_out', $no_out);
+                $this->db->update('tb_pinjam');
 
 
-            echo json_encode(array(
-                "statusCode" => 200
-            ));
-            // }
+                $data = [
+                    'no_return' => $nox,
+                    'date' => date('d-m-Y H:i:s'),
+                    'employee_id' => $this->input->post('employee_id'),
+                    'item_code' => $this->input->post('item_code'),
+                    'no_out' => $this->input->post('no_pinjam'),
+                    'remark' => '',
+
+                ];
+
+                $this->db->insert('tb_kembali', $data);
+
+
+
+                echo json_encode(array(
+                    "statusCode" => 200
+                ));
+            }
         }
     }
-
 
 
     public function get_id_otomatis()
@@ -345,31 +369,62 @@ class Controller_Pengembalian extends CI_Controller
 
     public function get_data_report()
     {
-        // Datatables Variables
+
+
 
         $draw = intval($this->input->get("draw"));
-        $this->db->order_by("id_retur", "desc");
-        $query = $this->db->get("v_kembali");
+
+        $from_trx = $this->input->post('from_transaksi');
+        $to_trx = $this->input->post('to_transaksi');
+        $this->db->where('date >=', $from_trx);
+        $this->db->where('date <=', $to_trx . '24:00:00');
+
+
+        $query = $this->db->get("tb_kembali");
         $data = [];
         $no = 0;
 
 
         foreach ($query->result() as $r) {
+
+            $this->db->where('employee_id', $r->employee_id);
+            $xx = $this->db->get('tb_employee');
+            $this->db->where('item_code', $r->item_code);
+            $s = $this->db->get('tb_items');
+
+            $row_item_desc = '';
+            $row_name = '';
+            $row_department = '';
+            $row_line = '';
+
+
+
+
+
+
             $no++;
-
             $row = array();
-
             $row[] = $no;
-
             $row[] = $r->no_return;
-            $row[] = $r->Date;
+            $row[] = $r->date;
             $row[] = $r->no_out;
             $row[] = $r->employee_id;
-            $row[] = $r->employee_name;
-            $row[] = $r->department;
-            $row[] = $r->linex;
+            foreach ($xx->result() as $key) {
+                $row_name .= $key->employee_name;
+                $row_department .= $key->department;
+                $row_line .= $key->linex;
+            };
+
+            $row[] = $row_name;
+            // $row[] = $row_department;
+            // $row[] = $row_line;
             $row[] = $r->item_code;
-            $row[] = $r->item_description;
+            foreach ($s->result() as $key) {
+                $row_item_desc .= $key->item_description;
+            };
+
+            $row[] = $row_item_desc;
+
             $data[] = $row;
         };
 
@@ -400,17 +455,34 @@ class Controller_Pengembalian extends CI_Controller
 
     public function get_data_return_del()
     {
-        // Datatables Variables
 
 
         $draw = intval($this->input->get("draw"));
+
+        $from_trx = $this->input->post('from_transaksi');
+        $to_trx = $this->input->post('to_transaksi');
+        $this->db->where('date >=', $from_trx);
+        $this->db->where('date <=', $to_trx . '24:00:00');
+
         $this->db->order_by("id_retur", "desc");
-        $query = $this->db->get("v_kembali");
+        $query = $this->db->get("tb_kembali");
         $data = [];
         $no = 0;
 
 
         foreach ($query->result() as $r) {
+
+
+            $this->db->where('employee_id', $r->employee_id);
+            $xx = $this->db->get('tb_employee');
+            $this->db->where('item_code', $r->item_code);
+            $s = $this->db->get('tb_items');
+
+            $row_item_desc = '';
+            $row_name = '';
+            $row_department = '';
+            $row_line = '';
+
             $no++;
 
             $row = array();
@@ -418,14 +490,25 @@ class Controller_Pengembalian extends CI_Controller
             $row[] = $no;
 
             $row[] = $r->no_return;
-            $row[] = $r->Date;
+            $row[] = $r->date;
             $row[] = $r->no_out;
             $row[] = $r->employee_id;
-            $row[] = $r->employee_name;
-            $row[] = $r->department;
-            $row[] = $r->linex;
+            foreach ($xx->result() as $key) {
+                $row_name .= $key->employee_name;
+                $row_department .= $key->department;
+                $row_line .= $key->linex;
+            };
+
+            $row[] = $row_name;
+            $row[] = $row_department;
+            $row[] = $row_line;
             $row[] = $r->item_code;
-            $row[] = $r->item_description;
+            foreach ($s->result() as $key) {
+                $row_item_desc .= $key->item_description;
+            };
+
+            $row[] = $row_item_desc;
+
 
 
             $row[] = '

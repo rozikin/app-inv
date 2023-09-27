@@ -11,12 +11,6 @@ class Controller_Peminjaman extends CI_Controller
     }
 
 
-    // public function kode_otomatis_out()
-    // {
-    //     $data =  $this->peminjaman->buat_kode_out();
-    //     echo json_encode($data);
-    // }
-
 
     public function kode_otomatis_no_out()
     {
@@ -25,16 +19,15 @@ class Controller_Peminjaman extends CI_Controller
     }
 
 
-
     public function index()
     {
         $data['title'] = 'Peminjaman';
         $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
-        $data['pinjam'] = $this->peminjaman->get_out();
+        // $data['pinjam'] = $this->peminjaman->get_out();
 
         $this->load->view('template_oznet/header', $data);
         // $this->load->view('template_oznet/sidebar', $data);
-        $this->load->view('administrator/peminjaman/index', $data);
+        $this->load->view('administrator/peminjaman/index');
         $this->load->view('template_oznet/footer');
     }
 
@@ -45,18 +38,29 @@ class Controller_Peminjaman extends CI_Controller
         redirect('Controller_peminjaman/material_out');
     }
 
-
     public function get_data_material_out_all()
     {
         // Datatables Variables
 
+        date_default_timezone_set('Asia/Jakarta');
+
         $draw = intval($this->input->get("draw"));
         $this->db->order_by("id_out", "desc");
-        $query = $this->db->get("v_pinjam");
+        $query = $this->db->get("tb_pinjam");
         $data = [];
         $no = 0;
 
         foreach ($query->result() as $r) {
+            $this->db->where('employee_id', $r->employee_id);
+            $xx = $this->db->get('tb_employee');
+            $this->db->where('item_code', $r->item_code);
+            $s = $this->db->get('tb_items');
+
+            $row_item_desc = '';
+            $row_name = '';
+            $row_department = '';
+            $row_line = '';
+
             $no++;
 
             $row = array();
@@ -64,11 +68,21 @@ class Controller_Peminjaman extends CI_Controller
             $row[] = $r->no_out;
             $row[] = $r->date;
             $row[] = $r->employee_id;
-            $row[] = $r->employee_name;
-            $row[] = $r->department;
-            $row[] = $r->line;
+            foreach ($xx->result() as $key) {
+                $row_name .= $key->employee_name;
+                $row_department .= $key->department;
+                $row_line .= $key->linex;
+            };
+
+            $row[] = $row_name;
+            $row[] = $row_department;
+            $row[] = $row_line;
             $row[] = $r->item_code;
-            $row[] = $r->item_description;
+            foreach ($s->result() as $key) {
+                $row_item_desc .= $key->item_description;
+            };
+
+            $row[] = $row_item_desc;
 
 
             $data[] = $row;
@@ -84,6 +98,7 @@ class Controller_Peminjaman extends CI_Controller
         echo json_encode($result);
         exit();
     }
+
 
 
     function get_data_nik()
@@ -103,48 +118,55 @@ class Controller_Peminjaman extends CI_Controller
 
     public function get_data_material_out()
     {
-        // Datatables Variables
-
+        date_default_timezone_set('Asia/Jakarta');
 
         $draw = intval($this->input->get("draw"));
-        $this->db->where('remark', 'PINJAM');
+
+        $this->db->where('date >', date('d-m-Y 00:00:00'));
+        $this->db->where('date <', date('d-m-Y 24:00:00'));
+        // $this->db->where('remark', 'PINJAM');
         $this->db->order_by("id_out", "desc");
-        $query = $this->db->get("v_pinjam");
+        $query = $this->db->get("tb_pinjam");
         $data = [];
         $no = 0;
 
 
         foreach ($query->result() as $r) {
+            $this->db->where('employee_id', $r->employee_id);
+            $xx = $this->db->get('tb_employee');
+            $this->db->where('item_code', $r->item_code);
+            $s = $this->db->get('tb_items');
+
+            $row_item_desc = '';
+            $row_name = '';
+            $row_department = '';
+            $row_line = '';
             $no++;
 
             $row = array();
-
             $row[] = $no;
-
             $row[] = $r->no_out;
             $row[] = $r->date;
             $row[] = $r->employee_id;
-            $row[] = $r->employee_name;
-            $row[] = $r->department;
-            $row[] = $r->line;
+            foreach ($xx->result() as $key) {
+                $row_name .= $key->employee_name;
+                $row_department .= $key->department;
+                $row_line .= $key->linex;
+            };
+
+            $row[] = $row_name;
+            $row[] = $row_department;
+            $row[] = $row_line;
             $row[] = $r->item_code;
-            $row[] = $r->item_description;
+            foreach ($s->result() as $key) {
+                $row_item_desc .= $key->item_description;
+            };
+
+            $row[] = $row_item_desc;
             $row[] = $r->remark == 'PINJAM' ? '<a class="badge badge-danger">' . $r->remark . '</a>' : '<a class="badge badge-success">' . $r->remark . '</a>';
 
 
-            // $row[] = '
 
-            // <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
-            // Action
-            // <span class="sr-only">Toggle Dropdown</span>
-            // </button>
-            // <div class="dropdown-menu" role="menu">
-
-            // <div class="dropdown-divider"></div>
-
-            // <a class="dropdown-item " onclick="delete_data(' . $r->id_out . ')"><span class="fa fa-trash text-danger"></span> Delete</a>
-            // </div>
-            // ';
             $data[] = $row;
         };
 
@@ -182,40 +204,44 @@ class Controller_Peminjaman extends CI_Controller
 
 
         if ($this->input->post('type') == 1) {
-            // $no_id = $this->input->post('no_out');
-            // $sql = $this->db->query("SELECT no_out FROM tb_pinjam where no_out = '$no_id' ");
-            // $cek = $sql->num_rows();
+            $no_id = $this->input->post('employee_id');
+            $sql = $this->db->query("SELECT employee_id FROM tb_employee where employee_id = '$no_id' ");
+            $cek = $sql->num_rows();
 
-            // if ($cek < 1) {
+            $no_item = $this->input->post('item_code');
+            $sqlx = $this->db->query("SELECT item_code FROM tb_items where item_code = '$no_item' ");
+            $cek2 = $sqlx->num_rows();
 
-            $data = [
-
-                'no_out' => $nox,
-                'date' => date('d-m-Y H:i:s'),
-                'employee_id' => $this->input->post('employee_id'),
-                'item_code' => $this->input->post('item_code'),
-                'remark' => 'PINJAM',
-                'no_return' => '',
-                'date_ret' => ''
-
-            ];
+            if ($cek > 0  && $cek2 > 0) {
 
 
-            $this->db->insert('tb_pinjam', $data);
+                $data = [
+
+                    'no_out' => $nox,
+                    'date' => date('d-m-Y H:i:s'),
+                    'employee_id' => $this->input->post('employee_id'),
+                    'item_code' => $this->input->post('item_code'),
+                    'remark' => 'PINJAM',
+                    'no_return' => '',
+                    'date_ret' => ''
+
+                ];
 
 
-            $item_code = $this->input->post('item_code');
-            $this->db->set('status', '1');
-            $this->db->where('item_code', $item_code);
-            $this->db->update('tb_items');
+                $this->db->insert('tb_pinjam', $data);
 
-            echo json_encode(array(
-                "statusCode" => 200
-            ));
-            // }
+
+                $item_code = $this->input->post('item_code');
+                $this->db->set('status', '1');
+                $this->db->where('item_code', $item_code);
+                $this->db->update('tb_items');
+
+                echo json_encode(array(
+                    "statusCode" => 200
+                ));
+            }
         }
     }
-
 
 
     public function get_id_otomatis()
@@ -264,31 +290,59 @@ class Controller_Peminjaman extends CI_Controller
 
     public function get_data_report()
     {
-        // Datatables Variables
-
-
         $draw = intval($this->input->get("draw"));
-        $this->db->order_by("id_out", "desc");
-        $query = $this->db->get("v_pinjam");
+
+
+        $from_trx = $this->input->post('from_transaksi');
+        $to_trx = $this->input->post('to_transaksi');
+        $this->db->where('date >=', $from_trx);
+        $this->db->where('date <=', $to_trx . '24:00:00');
+
+        $query = $this->db->get("tb_pinjam");
         $data = [];
         $no = 0;
 
 
         foreach ($query->result() as $r) {
+
+
+            $this->db->where('employee_id', $r->employee_id);
+            $xx = $this->db->get('tb_employee');
+            $this->db->where('item_code', $r->item_code);
+            $s = $this->db->get('tb_items');
+
+            $row_item_desc = '';
+            $row_name = '';
+            $row_department = '';
+            $row_line = '';
+
+
+
             $no++;
 
             $row = array();
 
             $row[] = $no;
-
             $row[] = $r->no_out;
             $row[] = $r->date;
             $row[] = $r->employee_id;
-            $row[] = $r->employee_name;
-            $row[] = $r->department;
-            $row[] = $r->line;
+
+            foreach ($xx->result() as $key) {
+                $row_name .= $key->employee_name;
+                $row_department .= $key->department;
+                $row_line .= $key->linex;
+            };
+
+            $row[] = $row_name;
+            $row[] = $row_department;
+            $row[] = $row_line;
             $row[] = $r->item_code;
-            $row[] = $r->item_description;
+            foreach ($s->result() as $key) {
+                $row_item_desc .= $key->item_description;
+            };
+
+            $row[] = $row_item_desc;
+
             $data[] = $row;
         };
 
@@ -322,33 +376,61 @@ class Controller_Peminjaman extends CI_Controller
 
     public function get_data_transaksi()
     {
-        // Datatables Variables
 
+        $from_trx = $this->input->post('from_transaksi');
+        $to_trx = $this->input->post('to_transaksi');
 
         $draw = intval($this->input->get("draw"));
-        $this->db->order_by("id_out", "desc");
-        $query = $this->db->get("v_pinjam");
+
+
+        $this->db->where('date >=', $from_trx);
+        $this->db->where('date <=', $to_trx . '24:00:00');
+        $query = $this->db->get("tb_pinjam");
+
         $data = [];
         $no = 0;
 
 
         foreach ($query->result() as $r) {
+
+            $this->db->where('employee_id', $r->employee_id);
+            $xx = $this->db->get('tb_employee');
+
+            $this->db->where('item_code', $r->item_code);
+            $s = $this->db->get('tb_items');
+
+            $row_item_desc = '';
+            $row_name = '';
+            $row_department = '';
+            $row_line = '';
+
+
             $no++;
-
             $row = array();
-
             $row[] = $no;
-
             $row[] = $r->no_out;
             $row[] = $r->date;
             $row[] = $r->no_return;
             $row[] = $r->date_ret;
             $row[] = $r->employee_id;
-            $row[] = $r->employee_name;
-            $row[] = $r->department;
-            $row[] = $r->line;
+            foreach ($xx->result() as $key) {
+                $row_name .= $key->employee_name;
+                $row_department .= $key->department;
+                $row_line .= $key->linex;
+            };
+
+            $row[] = $row_name;
+            $row[] = $row_department;
+            $row[] = $row_line;
+
             $row[] = $r->item_code;
-            $row[] = $r->item_description;
+            foreach ($s->result() as $key) {
+                $row_item_desc .= $key->item_description;
+            };
+
+            $row[] = $row_item_desc;
+
+
             $row[] = $r->remark == 'PINJAM' ? '<a class="badge badge-danger">' . $r->remark . '</a>' : '<a class="badge badge-success">' . $r->remark . '</a>';
             $data[] = $row;
         };
@@ -372,11 +454,11 @@ class Controller_Peminjaman extends CI_Controller
     {
         $data['title'] = 'Peminjaman';
         $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
-        $data['pinjam'] = $this->peminjaman->get_out();
+
 
         $this->load->view('template_oznet/header', $data);
         // $this->load->view('template_oznet/sidebar', $data);
-        $this->load->view('administrator/peminjaman/del_pinjam', $data);
+        $this->load->view('administrator/peminjaman/del_pinjam');
         $this->load->view('template_oznet/footer');
     }
 
@@ -388,13 +470,30 @@ class Controller_Peminjaman extends CI_Controller
 
 
         $draw = intval($this->input->get("draw"));
+
+        $from_trx = $this->input->post('from_transaksi');
+        $to_trx = $this->input->post('to_transaksi');
+        $this->db->where('date >=', $from_trx);
+        $this->db->where('date <=', $to_trx . '24:00:00');
+
+
         $this->db->order_by("id_out", "desc");
-        $query = $this->db->get("v_pinjam");
+        $query = $this->db->get("tb_pinjam");
         $data = [];
         $no = 0;
 
 
         foreach ($query->result() as $r) {
+            $this->db->where('employee_id', $r->employee_id);
+            $xx = $this->db->get('tb_employee');
+            $this->db->where('item_code', $r->item_code);
+            $s = $this->db->get('tb_items');
+
+            $row_item_desc = '';
+            $row_name = '';
+            $row_department = '';
+            $row_line = '';
+
             $no++;
 
             $row = array();
@@ -404,11 +503,21 @@ class Controller_Peminjaman extends CI_Controller
             $row[] = $r->no_out;
             $row[] = $r->date;
             $row[] = $r->employee_id;
-            $row[] = $r->employee_name;
-            $row[] = $r->department;
-            $row[] = $r->line;
+            foreach ($xx->result() as $key) {
+                $row_name .= $key->employee_name;
+                $row_department .= $key->department;
+                $row_line .= $key->linex;
+            };
+
+            $row[] = $row_name;
+            $row[] = $row_department;
+            $row[] = $row_line;
             $row[] = $r->item_code;
-            $row[] = $r->item_description;
+            foreach ($s->result() as $key) {
+                $row_item_desc .= $key->item_description;
+            };
+
+            $row[] = $row_item_desc;
             $row[] = $r->remark == 'PINJAM' ? '<a class="badge badge-danger">' . $r->remark . '</a>' : '<a class="badge badge-success">' . $r->remark . '</a>';
 
 

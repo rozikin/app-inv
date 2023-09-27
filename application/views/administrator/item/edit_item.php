@@ -66,6 +66,14 @@
 
                                     </div>
 
+                                    <div class="form-group">
+                                        <label for="status">Status</label>
+                                        <input type="text" class="form-control form-control-sm" name="status"
+                                            id="status" placeholder="status" value="<?= $items['status'] ?>">
+
+                                    </div>
+
+
 
                                     <div class="form-group">
                                         <!-- /input-group -->
@@ -235,6 +243,7 @@ $(document).on('click', '#edit', function(e) {
     var id_unit = $('#id_unit').val();
     var id_category = $('#id_category').val();
     var linex = $('#linex').val();
+    var status = $('#status').val();
 
     var remark = $('#remark').val();
     var a = "<?php echo site_url('Controller_Item') ?>";
@@ -250,6 +259,7 @@ $(document).on('click', '#edit', function(e) {
             id_supplier: id_supplier,
             id_unit: id_unit,
             remark: remark,
+            status: status,
             linex: linex
         },
         success: function(data) {

@@ -13,7 +13,7 @@
     <div class="container-fluid">
 
 
-        <div class="row bg-gray-dark">
+        <div class="row">
             <div class="col-12">
                 <div class="row">
                     <div class="col-1 text-center">
@@ -28,7 +28,7 @@
 
                 </div>
 
-                <div class="card bg-gray-dark">
+                <div class="card bg-dark">
                     <div class="card-body">
 
                         <form id="form-user">
@@ -37,19 +37,9 @@
                                     <div class="row">
                                         <div class="col-sm-12">
                                             <div class="form-group row mb-1">
-                                                <!-- <label for="no_sj" class="col-sm-1 col-form-label">NO KMBL</label>
-                                                <div class="col-2">
-
-                                                    <input type="hidden" class="form-control form-control-sm"
-                                                        id="id_return" name="id_return" required>
-                                                    <input type="text" class="form-control form-control-sm"
-                                                        id="no_return" name="no_return">
-                                                </div> -->
-
-
 
                                                 <label for="employee_id" class="col-sm-1 col-form-label">NIK</label>
-                                                <div class="col-3">
+                                                <div class="col-4">
                                                     <input type="text" class="form-control form-control-sm" id="employee_id" name="employee_id" required autofocus>
                                                     <div class="box-login">
                                                         <input type="text" class="form-control form-control-sm" id="employee_name" name="employee_name">
@@ -58,14 +48,8 @@
                                                 </div>
 
 
-                                                <label for="no_pinjam" class="col-sm-1 col-form-label">NO PJM</label>
-                                                <div class="col-3">
-                                                    <input type="text" class="form-control form-control-sm" id="no_pinjam" name="no_pinjam" onclick="cari_pinjam()" required autofocus>
-
-                                                </div>
-
                                                 <label for="item_code" class="col-sm-1 col-form-label">ITEM</label>
-                                                <div class="col-sm-3">
+                                                <div class="col-sm-4">
                                                     <input type="text" class="form-control form-control-sm" id="item_code" name="item_code" required>
                                                     <div class="box-login">
                                                         <input type="text" class="form-control form-control-sm " id="item_description" name="item_description">
@@ -73,7 +57,17 @@
                                                     <div class="box-login">
                                                         <input type="text" class="form-control form-control-sm " id="status" name="status">
                                                     </div>
+
+                                                    <div class="box-login">
+                                                        <input type="text" class="form-control form-control-sm" id="no_pinjam" name="no_pinjam" required>
+
+                                                    </div>
+
                                                 </div>
+
+
+
+
                                             </div>
 
                                             <a class="btn btn-success btn-sm float-left mr-2" data-widget="fullscreen" href="#" role="button">
@@ -170,11 +164,10 @@
                                         <th>Date</th>
                                         <th>Item Code</th>
                                         <th>Desc</th>
-                                        <th>Desc</th>
-                                        <th>Desc</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
-
                             </table>
                         </div>
                     </div>
@@ -242,19 +235,6 @@
     }
 
 
-
-    // function kd_otomatis_no_return() {
-    //     $.ajax({
-    //         url: "<?php echo site_url('Controller_Pengembalian/kode_otomatis_no_return') ?>/",
-    //         type: "GET",
-    //         dataType: "JSON",
-    //         success: function(data) {
-
-    //             $('[name="no_return"]').val(data);
-    //         }
-    //     });
-
-    // }
 
     function bersihkan_input() {
 
@@ -371,7 +351,7 @@
 
     $(document).ready(function() {
         var pc = document.getElementById('employee_id');
-        var px = document.getElementById('no_pinjam');
+        var px = document.getElementById('item_code');
 
         pc.focus();
 
@@ -401,7 +381,7 @@
                     });
 
                     px.focus();
-                    cari_pinjam();
+                    // cari_pinjam();
                 },
                 error: function() {
                     toastr.error('data karyawan tidak pinjam barang!')
@@ -417,39 +397,40 @@
 
 
 
-        // px.onchange = function() {
-        //     var item_code = $(this).val();
+        px.onchange = function() {
+            var item_code = $(this).val();
 
-        //     $.ajax({
-        //         type: "POST",
-        //         url: "<?php echo site_url('Controller_Pengembalian/get_data_kode') ?>/",
-        //         dataType: "JSON",
-        //         data: {
-        //             item_code: item_code
-        //         },
-        //         cache: false,
-        //         success: function(data) {
-        //             $.each(data, function(item_code, item_description) {
-        //                 $('[name="item_description"]').val(data.item_description);
+            $.ajax({
+                type: "POST",
+                url: "<?php echo site_url('Controller_Pengembalian/get_data_kode') ?>/",
+                dataType: "JSON",
+                data: {
+                    item_code: item_code
+                },
+                cache: false,
+                success: function(data) {
+                    $.each(data, function(item_code, item_description) {
+                        $('[name="item_description"]').val(data.item_description);
+                        $('[name="no_pinjam"]').val(data.no_out);
 
-        //                 if (data.status == 1) {
-        //                     $('[name="status"]').val('OUT');
-        //                 } else {
-        //                     $('[name="status"]').val('');
-        //                 }
-        //             });
+                        if (data.status == 1) {
+                            $('[name="status"]').val('PINJAM');
+                        } else {
+                            $('[name="status"]').val('KEMBALI');
+                        }
+                    });
 
-        //             $('#simpan').prop('disabled', false);
-        //             $('#simpan').click();
+                    $('#simpan').prop('disabled', false);
+                    $('#simpan').click();
 
-        //         },
-        //         error: function() {
-        //             toastr.error('data item tidak ditemukan!')
-        //             px.focus();
+                },
+                error: function() {
+                    toastr.error('data tidak dipinjam / sudah kembali!')
+                    px.focus();
 
-        //         }
-        //     });
-        // }
+                }
+            });
+        }
 
 
 
@@ -465,7 +446,7 @@
             var no_return = $('#no_return').val();
             var status = $('#status').val();
 
-            if (employee_id != "" && no_pinjam != "" && status == "OUT") {
+            if (employee_id != "" && no_pinjam != "" && item_code != "" && status == "PINJAM") {
                 // $("#simpan").attr("disabled", "disabled");
                 $.ajax({
                     url: "<?php echo base_url("Controller_Pengembalian/create_return_ajax"); ?>",

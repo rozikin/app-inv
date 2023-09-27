@@ -26,11 +26,6 @@ class Model_Peminjaman extends CI_Model
     }
 
 
-    public function get_out()
-    {
-        $query = "SELECT * from v_pinjam order by id_out DESC";
-        return $this->db->query($query)->result_array();
-    }
 
     public function hapusDataOut($id)
     {
@@ -38,12 +33,6 @@ class Model_Peminjaman extends CI_Model
         $this->db->delete('tb_pinjam');
     }
 
-
-    function saverecords($no_out, $datex, $employee_id, $item_code, $remark)
-    {
-        $query = "INSERT INTO `tb_pinjam`( `no_out`,`date`,`employee_id`, `item_code`, `remark`) VALUES ('$no_out', '$datex', '$employee_id', '$item_code', '$remark')";
-        return $this->db->query($query);
-    }
 
 
 

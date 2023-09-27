@@ -23,14 +23,66 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
-                    <?php if (validation_errors()) : ?>
-                    <div class="alert alert-danger" role="alert">
-                        <?= validation_errors(); ?></div>
-                    <?php endif; ?>
-                    <?= $this->session->flashdata('message'); ?>
+
 
                     <div class="card">
-                        <!-- /.card-header -->
+
+                        <div class="container mt-5">
+
+                            <div class="row">
+
+
+                                <div class="col-md-5">
+
+                                    <div class="form-group row mb-1">
+                                        <label for="reservationdatetime" class="col-sm-4 col-form-label">From </label>
+                                        <div class="col-sm-5">
+                                            <!-- Date -->
+                                            <div class="input-group date" id="reservationdate"
+                                                data-target-input="nearest">
+                                                <input type="text" class="form-control datetimepicker-input"
+                                                    data-target="#reservationdate" id="from_transaksi"
+                                                    name="from_transaksi" />
+                                                <div class="input-group-append" data-target="#reservationdate"
+                                                    data-toggle="datetimepicker">
+                                                    <div class="input-group-text"><i class="fa fa-calendar"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="col-5">
+                                    <div class="form-group row mb-1">
+                                        <label for="reservationdatetime" class="col-sm-4 col-form-label"> To</label>
+                                        <div class="col-sm-5">
+                                            <!-- Date -->
+                                            <div class="input-group date" id="reservationdate1"
+                                                data-target-input="nearest">
+                                                <input type="text" class="form-control datetimepicker-input"
+                                                    data-target="#reservationdate1" id="to_transaksi"
+                                                    name="to_transaksi" />
+                                                <div class="input-group-append" data-target="#reservationdate1"
+                                                    data-toggle="datetimepicker">
+                                                    <div class="input-group-text"><i class="fa fa-calendar"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-1">
+                                    <button class="btn btn-primary text-left" id="cari_transaksi">pilih</button>
+
+
+                                </div>
+                            </div>
+                        </div>
+
 
                         <div class="card-body">
 
@@ -69,20 +121,53 @@
 
 
 
-
 <script>
 $(document).ready(function() {
-    //call function show all product
+
+    $("#cari_transaksi").click(function() {
+
+        cari_transaksi();
+
+    })
+
+});
+
+
+
+function cari_transaksi() {
+
+
+    var from_trans = $('#from_transaksi').val();
+    var to_trans = $('#to_transaksi').val();
+
+    console.log(from_trans);
+    console.log(to_trans);
+
     table = $('#example6').DataTable({
         "responsive": true,
+        destroy: true,
+
         "autoWidth": false,
+        destroy: true,
+
         "dom": 'Bfrtip',
-        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
+        "buttons": ["csv", "excel", "pdf", "print", "colvis"],
+
 
         "ajax": {
             url: '<?php echo site_url('Controller_Peminjaman/get_data_report') ?>',
+            data: {
+
+                from_transaksi: from_trans,
+                to_transaksi: to_trans
+            },
             type: 'POST'
         }
+
     }).buttons().container().appendTo('#example6_wrapper .col-md-6:eq(0)');
-});
+
+
+
+
+};
 </script>

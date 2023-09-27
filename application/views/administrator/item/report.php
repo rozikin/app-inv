@@ -43,6 +43,7 @@
                                         <th>DESCRIPTION</th>
                                         <th>UNIT</th>
                                         <th>CATEGORY</th>
+                                        <th>DEPT</th>
                                         <th>STATUS</th>
                                     </tr>
                                 </thead>

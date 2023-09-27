@@ -32,25 +32,57 @@ class Controller_Item extends CI_Controller
 		$this->load->view('template_oznet/footer');
 	}
 
-	public function get_data()
+
+	public function Import_Item()
+	{
+		$data['title'] = 'Item';
+		$data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+		//konek model
+
+		$data['item'] = $this->item->get_item();
+
+		$this->load->view('template_oznet/header', $data);
+		$this->load->view('template_oznet/sidebar', $data);
+		$this->load->view('administrator/item/index_import', $data);
+		$this->load->view('template_oznet/footer');
+	}
+
+
+	public function get_data_index()
 	{
 		// Datatables Variables
 		$draw = intval($this->input->get("draw"));
 
 		$this->db->order_by("id_item", "desc");
 		$this->db->where("id_item >", 0);
-		$query = $this->db->get("v_items");
+		$query = $this->db->get("tb_items");
 		$data = [];
 		$no = 0;
 
 		foreach ($query->result() as $r) {
+
+			$this->db->where('id_category', $r->id_category);
+			$xx = $this->db->get('tb_category');
+			$this->db->where('id_unit', $r->id_unit);
+			$s = $this->db->get('tb_unit');
+
+			$row_category = '';
+			$row_unit = '';
+
 			$no++;
 			$row = array();
 			$row[] = $no;
 			$row[] = $r->item_code;
 			$row[] = $r->item_description;
-			$row[] = $r->name_category;
-			$row[] = $r->unit;
+			foreach ($xx->result() as $key) {
+				$row_category .= $key->name_category;
+			};
+
+			$row[] = $row_category;
+			foreach ($s->result() as $key) {
+				$row_unit .= $key->code_unit;
+			};
+			$row[] = $row_unit;
 			$row[] = $r->linex;
 			if ($r->remark)
 				$row[] = '<a href="' . base_url('./assets/images/item/' . $r->remark) . '" target="_blank"><img src="' . base_url('./assets/images/item/' . $r->remark) . '"/></a>';
@@ -66,13 +98,83 @@ class Controller_Item extends CI_Controller
 			<div class="dropdown-menu" role="menu">
 	  		<a class="dropdown-item" onclick="edit_data(' . "'" . $r->id_item . "'" . ')"><span class="fa fa-edit text-primary"></span> Edit</a>
 	  		<div class="dropdown-divider"></div>
+	  	
+			</div>
+			';
+
+
+			$data[] = $row;
+		};
+
+		$result = array(
+			"draw" => $draw,
+			"recordsTotal" => $query->num_rows(),
+			"recordsFiltered" => $query->num_rows(),
+			"data" => $data
+		);
+
+		echo json_encode($result);
+		exit();
+	}
+
+
+
+
+	public function get_data()
+	{
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+
+		$this->db->order_by("id_item", "desc");
+		$this->db->where("id_item >", 0);
+		$query = $this->db->get("tb_items");
+		$data = [];
+		$no = 0;
+
+		foreach ($query->result() as $r) {
+			$this->db->where('id_category', $r->id_category);
+			$xx = $this->db->get('tb_category');
+			$this->db->where('id_unit', $r->id_unit);
+			$s = $this->db->get('tb_unit');
+
+			$row_category = '';
+			$row_unit = '';
+
+			$no++;
+			$row = array();
+			$row[] = $no;
+			$row[] = $r->item_code;
+			$row[] = $r->item_description;
+			foreach ($xx->result() as $key) {
+				$row_category .= $key->name_category;
+			};
+
+			$row[] = $row_category;
+			foreach ($s->result() as $key) {
+				$row_unit .= $key->code_unit;
+			};
+			$row[] = $row_unit;
+			$row[] = $r->linex;
+			$row[] = $r->status;
+			// if ($r->remark)
+			// 	$row[] = '<a href="' . base_url('./assets/images/item/' . $r->remark) . '" target="_blank"><img src="' . base_url('./assets/images/item/' . $r->remark) . '"/></a>';
+			// else
+			// 	$row[] = '(No barcode)';
+
+			$row[] = '
+			<button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
+			Action
+	  		<span class="sr-only">Toggle Dropdown</span>
+			</button>
+
+			<div class="dropdown-menu" role="menu">
+	  		<a class="dropdown-item" onclick="edit_data(' . "'" . $r->id_item . "'" . ')"><span class="fa fa-edit text-primary"></span> Edit</a>
+	  		<div class="dropdown-divider"></div>
 	  		<a class="dropdown-item" onclick="deleted(' . "'" . $r->id_item . "'" . ')"><span class="fa fa-trash text-danger"></span> Delete</a>
 			</div>
 			';
 
-			// //add html for action
-			// $row[] = '<a class="badge badge-primary" href="javascript:void(0)" title="Edit" onclick="edit_data(' . "'" . $r->id_item . "'" . ')"><i class="fas fa-edit"></i> Edit</a>
-			// <a class="badge badge-danger" href="javascript:void(0)" title="Hapus" onclick="deleted(' . "'" . $r->id_item . "'" . ')"><i class="fas fa-trash"></i> Delete</a>';
+
 			$data[] = $row;
 		};
 
@@ -323,7 +425,8 @@ class Controller_Item extends CI_Controller
 			'id_category' => $this->input->post('id_category'),
 			'id_unit' => $this->input->post('id_unit'),
 			'remark' => $image_name,
-			'linex' => $this->input->post('linex')
+			'linex' => $this->input->post('linex'),
+			'status' => $this->input->post('status')
 		];
 
 		$this->item->update_data('tb_items', $data, $id);
@@ -573,49 +676,68 @@ class Controller_Item extends CI_Controller
 
 	public function get_item_report()
 	{
-		// Datatables Variables
+
 		$draw = intval($this->input->get("draw"));
 
-		$this->db->order_by("status", "DESC");
-		$query = $this->db->get("v_items");
+		$this->db->order_by("id_item", "desc");
+		$this->db->where("id_item >", 0);
+		$query = $this->db->get("tb_items");
 		$data = [];
 		$no = 0;
 
 		foreach ($query->result() as $r) {
+
+			$this->db->where('id_category', $r->id_category);
+			$xx = $this->db->get('tb_category');
+			$this->db->where('id_unit', $r->id_unit);
+			$s = $this->db->get('tb_unit');
+
+			$row_category = '';
+			$row_unit = '';
+
 			$no++;
 			$row = array();
+			$row[] = $r->item_code;
+			$row[] = $r->item_description;
+			foreach ($xx->result() as $key) {
+				$row_category .= $key->name_category;
+			};
 
-
-			if ($r->status == 1) {
-
-				// $row[] = '<div class="text-danger text-bold">' . $no . '</div>';
-				$row[] = '<div class="text-danger text-bold">' . $r->item_code . '</div>';
-				$row[] = '<div class="text-danger text-bold">' . $r->item_description . '</div>';
-				$row[] = '<div class="text-danger text-bold">' . $r->unit . '</div>';
-				$row[] = '<div class="text-danger text-bold">' . $r->name_category . '</div>';
-
-				if ($r->status == 1)
-					$row[] = '<div class="text-danger text-bold">DIPINJAM</div>';
-				else
-					$row[] = 'READY';
-			} else {
-
-				// $row[] = $no;
-				$row[] = $r->item_code;
-				$row[] = $r->item_description;
-				$row[] = $r->unit;
-				$row[] = $r->name_category;
-
-				if ($r->status == 1)
-					$row[] = 'DIPINJAM';
-				else
-					$row[] = 'READY';
-			}
-
+			$row[] = $row_category;
+			foreach ($s->result() as $key) {
+				$row_unit .= $key->code_unit;
+			};
+			$row[] = $row_unit;
+			$row[] = $r->linex;
+			$row[] = $r->status;
 
 
 			$data[] = $row;
 		};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 		$result = array(
 			"draw" => $draw,
