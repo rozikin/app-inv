@@ -709,7 +709,7 @@ class Controller_Item extends CI_Controller
 			};
 			$row[] = $row_unit;
 			$row[] = $r->linex;
-			$row[] = $r->status;
+			$row[] = $r->status == 1 ? 'DIPINJAM' : 'KEMBALI';
 
 
 			$data[] = $row;

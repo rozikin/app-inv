@@ -155,7 +155,9 @@ class Admin extends CI_Controller
 		$this->db->where('date >', date('d-m-Y 00:00:00'));
 		$this->db->where('date <', date('d-m-Y 24:00:00'));
 		$this->db->like('remark', 'PINJAM');
-		$this->db->like('item_code', 'QC');
+		$this->db->group_start()->like('item_code', 'QC')->or_group_start()->like('item_code', 'FAB')->group_end()
+			->group_end();
+		// $this->db->or_like('item_code', 'FAB');
 		$data = $this->db->get('tb_pinjam')->num_rows();
 
 		$message = '<h6>' . $data . '</h6>';

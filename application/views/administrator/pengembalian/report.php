@@ -35,13 +35,9 @@
                                         <label for="reservationdatetime" class="col-sm-4 col-form-label">From </label>
                                         <div class="col-sm-5">
                                             <!-- Date -->
-                                            <div class="input-group date" id="reservationdate"
-                                                data-target-input="nearest">
-                                                <input type="text" class="form-control datetimepicker-input"
-                                                    data-target="#reservationdate" id="from_transaksi"
-                                                    name="from_transaksi" />
-                                                <div class="input-group-append" data-target="#reservationdate"
-                                                    data-toggle="datetimepicker">
+                                            <div class="input-group date" id="reservationdate" data-target-input="nearest">
+                                                <input type="text" class="form-control datetimepicker-input" data-target="#reservationdate" id="from_transaksi" name="from_transaksi" />
+                                                <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
                                                     <div class="input-group-text"><i class="fa fa-calendar"></i>
                                                     </div>
                                                 </div>
@@ -56,13 +52,9 @@
                                         <label for="reservationdatetime" class="col-sm-4 col-form-label"> To</label>
                                         <div class="col-sm-5">
                                             <!-- Date -->
-                                            <div class="input-group date" id="reservationdate1"
-                                                data-target-input="nearest">
-                                                <input type="text" class="form-control datetimepicker-input"
-                                                    data-target="#reservationdate1" id="to_transaksi"
-                                                    name="to_transaksi" />
-                                                <div class="input-group-append" data-target="#reservationdate1"
-                                                    data-toggle="datetimepicker">
+                                            <div class="input-group date" id="reservationdate1" data-target-input="nearest">
+                                                <input type="text" class="form-control datetimepicker-input" data-target="#reservationdate1" id="to_transaksi" name="to_transaksi" />
+                                                <div class="input-group-append" data-target="#reservationdate1" data-toggle="datetimepicker">
                                                     <div class="input-group-text"><i class="fa fa-calendar"></i>
                                                     </div>
                                                 </div>
@@ -124,48 +116,47 @@
 
 
 <script>
-$(document).ready(function() {
+    $(document).ready(function() {
 
-    $("#cari_transaksi").click(function() {
+        $("#cari_transaksi").click(function() {
 
-        cari_transaksi();
+            cari_transaksi();
 
-    })
+        })
 
-});
-
-
-
-function cari_transaksi() {
+    });
 
 
-    var from_trans = $('#from_transaksi').val();
-    var to_trans = $('#to_transaksi').val();
 
-    console.log(from_trans);
-    console.log(to_trans);
-
-    table = $('#example6').DataTable({
-        "responsive": true,
-        destroy: true,
-
-        "autoWidth": false,
-        destroy: true,
-
-        "dom": 'Bfrtip',
-        "buttons": ["csv", "excel", "pdf", "print", "colvis"],
+    function cari_transaksi() {
 
 
-        "ajax": {
-            url: '<?php echo site_url('Controller_Pengembalian/get_data_report') ?>',
-            data: {
+        var from_trans = $('#from_transaksi').val();
+        var to_trans = $('#to_transaksi').val();
 
-                from_transaksi: from_trans,
-                to_transaksi: to_trans
-            },
-            type: 'POST'
-        }
+        console.log(from_trans);
+        console.log(to_trans);
 
-    }).buttons().container().appendTo('#example6_wrapper .col-md-6:eq(0)');
-};
+        table = $('#example6').DataTable({
+            "responsive": true,
+
+            "autoWidth": false,
+            destroy: true,
+
+            "dom": 'Bfrtip',
+            "buttons": ["csv", "excel", "pdf", "print", "colvis"],
+
+
+            "ajax": {
+                url: '<?php echo site_url('Controller_Pengembalian/get_data_report') ?>',
+                data: {
+
+                    from_transaksi: from_trans,
+                    to_transaksi: to_trans
+                },
+                type: 'POST'
+            }
+
+        }).buttons().container().appendTo('#example6_wrapper .col-md-6:eq(0)');
+    };
 </script>

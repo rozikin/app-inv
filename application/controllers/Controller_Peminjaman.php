@@ -203,7 +203,12 @@ class Controller_Peminjaman extends CI_Controller
         $nox =  $this->peminjaman->buat_kode_no_out();
 
 
-        if ($this->input->post('type') == 1) {
+        $no_itemx = $this->input->post('item_code');
+        $sqlx = $this->db->query("SELECT * FROM tb_items where item_code = '$no_itemx' ");
+        $cek0 = $sqlx->row_array();
+
+
+        if ($cek0['status'] == 0) {
             $no_id = $this->input->post('employee_id');
             $sql = $this->db->query("SELECT employee_id FROM tb_employee where employee_id = '$no_id' ");
             $cek = $sql->num_rows();
@@ -295,10 +300,9 @@ class Controller_Peminjaman extends CI_Controller
 
         $from_trx = $this->input->post('from_transaksi');
         $to_trx = $this->input->post('to_transaksi');
-        $this->db->where('date >=', $from_trx);
-        $this->db->where('date <=', $to_trx . '24:00:00');
-
-        $query = $this->db->get("tb_pinjam");
+        $dates = 'date';
+        $coba = $this->db->query('SELECT * FROM tb_pinjam where ' . $dates . ' >= "' . $from_trx . '" <= "' . $to_trx . '"');
+        $query = $coba;
         $data = [];
         $no = 0;
 
@@ -381,11 +385,9 @@ class Controller_Peminjaman extends CI_Controller
         $to_trx = $this->input->post('to_transaksi');
 
         $draw = intval($this->input->get("draw"));
-
-
-        $this->db->where('date >=', $from_trx);
-        $this->db->where('date <=', $to_trx . '24:00:00');
-        $query = $this->db->get("tb_pinjam");
+        $dates = 'date';
+        $coba = $this->db->query('SELECT * FROM tb_pinjam where ' . $dates . ' >= "' . $from_trx . '" <= "' . $to_trx . '"');
+        $query = $coba;
 
         $data = [];
         $no = 0;
