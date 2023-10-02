@@ -63,10 +63,7 @@ class Admin extends CI_Controller
 	{
 
 
-		// date_default_timezone_set('Asia/Jakarta');
 
-		// $this->db->where('date >', date('d-m-Y 00:00:00'));
-		// $this->db->where('date <', date('d-m-Y 24:00:00'));
 		$this->db->where('remark', 'PINJAM');
 		$data = $this->db->get('tb_pinjam')->num_rows();
 
@@ -79,10 +76,6 @@ class Admin extends CI_Controller
 	{
 
 
-		// date_default_timezone_set('Asia/Jakarta');
-
-		// $this->db->where('date >', date('d-m-Y 00:00:00'));
-		// $this->db->where('date <', date('d-m-Y 24:00:00'));
 		$this->db->where('status', 1);
 		$data = $this->db->get('tb_items')->num_rows();
 
@@ -107,6 +100,30 @@ class Admin extends CI_Controller
 
 		echo json_encode(array("message" => $message));
 	}
+
+	function get_data_belum_kembali()
+	{
+
+		$this->db->where('remark', 'PINJAM');
+		$all_data_pinjam = $this->db->get('tb_pinjam')->num_rows();
+
+
+
+
+		$this->db->where('date >', date('d-m-Y 00:00:00'));
+		$this->db->where('date <', date('d-m-Y 24:00:00'));
+		$this->db->where('remark', 'PINJAM');
+		$data_pinjam_hari_ini = $this->db->get('tb_pinjam')->num_rows();
+
+		$hasil = $all_data_pinjam - $data_pinjam_hari_ini;
+
+		$message = '<h6 class="text-danger">' . $hasil . '</h6>';
+
+		echo json_encode(array("message" => $message));
+	}
+
+
+
 
 
 	function get_data_kembali_hari_ini()
