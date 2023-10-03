@@ -74,36 +74,36 @@
 
 
 <script>
-$(function() {
-    //Date picker
-    $('#reservationdate').datetimepicker({
-        format: 'DD-MM-yyyy'
-    });
-    $('#reservationdate2').datetimepicker({
-        format: 'DD-MM-yyyy'
+    $(function() {
+        //Date picker
+        $('#reservationdate').datetimepicker({
+            format: 'yyyy-MM-DD'
+        });
+        $('#reservationdate2').datetimepicker({
+            format: 'yyyy-MM-DD'
+        });
+
+        $('#reservationdate1').datetimepicker({
+            format: 'yyyy-MM-DD'
+        });
     });
 
-    $('#reservationdate1').datetimepicker({
-        format: 'DD-MM-yyyy'
+    $('#reservationdatetime').datetimepicker({
+        icons: {
+            time: 'far fa-clock'
+        }
     });
-});
+    $('#reservationdatetime2').datetimepicker({
+        icons: {
+            time: 'far fa-clock'
+        }
+    });
 
-$('#reservationdatetime').datetimepicker({
-    icons: {
-        time: 'far fa-clock'
-    }
-});
-$('#reservationdatetime2').datetimepicker({
-    icons: {
-        time: 'far fa-clock'
-    }
-});
-
-$('#reservationdatetime1').datetimepicker({
-    icons: {
-        time: 'far fa-clock'
-    }
-});
+    $('#reservationdatetime1').datetimepicker({
+        icons: {
+            time: 'far fa-clock'
+        }
+    });
 </script>
 
 

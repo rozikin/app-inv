@@ -11,18 +11,11 @@ class Controller_Peminjaman extends CI_Controller
     }
 
 
-
-    public function kode_otomatis_no_out()
-    {
-        $data =  $this->peminjaman->buat_kode_no_out();
-        echo json_encode($data);
-    }
-
-
     public function index()
     {
-        $data['title'] = 'Peminjaman';
-        $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+        $data['title'] = 'peminjaman';
+
+       $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
         // $data['pinjam'] = $this->peminjaman->get_out();
 
         $this->load->view('template_oznet/header', $data);
@@ -36,7 +29,18 @@ class Controller_Peminjaman extends CI_Controller
         $this->peminjaman->hapusDataOut($id);
         $this->session->set_flashdata('message', '<div class= "alert alert-success" role="alert">data pinjam deleted</div>');
         redirect('Controller_peminjaman/material_out');
+
     }
+ 
+
+
+    public function kode_otomatis_no_out()
+    {
+        $data =  $this->peminjaman->buat_kode_no_out();
+        echo json_encode($data);
+    }
+
+
 
     public function get_data_material_out_all()
     {
@@ -45,7 +49,7 @@ class Controller_Peminjaman extends CI_Controller
         date_default_timezone_set('Asia/Jakarta');
 
         $draw = intval($this->input->get("draw"));
-        $this->db->order_by("id_out", "desc");
+        $this->db->order_by("no_out", "desc");
         $query = $this->db->get("tb_pinjam");
         $data = [];
         $no = 0;
@@ -66,7 +70,7 @@ class Controller_Peminjaman extends CI_Controller
             $row = array();
             $row[] = $no;
             $row[] = $r->no_out;
-            $row[] = $r->date;
+            $row[] = $r->dates;
             $row[] = $r->employee_id;
             foreach ($xx->result() as $key) {
                 $row_name .= $key->employee_name;
@@ -122,10 +126,10 @@ class Controller_Peminjaman extends CI_Controller
 
         $draw = intval($this->input->get("draw"));
 
-        $this->db->where('date >', date('d-m-Y 00:00:00'));
-        $this->db->where('date <', date('d-m-Y 24:00:00'));
+        $this->db->like('dates', date('Y-m-d'));
+        // $this->db->where('dates <', date('Y-m-d 24:00:00'));
         // $this->db->where('remark', 'PINJAM');
-        $this->db->order_by("id_out", "desc");
+        $this->db->order_by("no_out", "desc");
         $query = $this->db->get("tb_pinjam");
         $data = [];
         $no = 0;
@@ -146,7 +150,7 @@ class Controller_Peminjaman extends CI_Controller
             $row = array();
             $row[] = $no;
             $row[] = $r->no_out;
-            $row[] = $r->date;
+            $row[] = $r->dates;
             $row[] = $r->employee_id;
             foreach ($xx->result() as $key) {
                 $row_name .= $key->employee_name;
@@ -209,7 +213,14 @@ class Controller_Peminjaman extends CI_Controller
 
 
         if ($cek0['status'] == 0) {
-            $no_id = $this->input->post('employee_id');
+
+            $sqlw = $this->db->query("SELECT no_out FROM tb_pinjam where no_out = '$nox'");
+            $cek0z = $sqlw->num_rows();
+
+
+            if($cek0z == 0){
+
+                $no_id = $this->input->post('employee_id');
             $sql = $this->db->query("SELECT employee_id FROM tb_employee where employee_id = '$no_id' ");
             $cek = $sql->num_rows();
 
@@ -223,7 +234,7 @@ class Controller_Peminjaman extends CI_Controller
                 $data = [
 
                     'no_out' => $nox,
-                    'date' => date('d-m-Y H:i:s'),
+                    'dates' => date('Y-m-d H:i:s'),
                     'employee_id' => $this->input->post('employee_id'),
                     'item_code' => $this->input->post('item_code'),
                     'remark' => 'PINJAM',
@@ -245,6 +256,14 @@ class Controller_Peminjaman extends CI_Controller
                     "statusCode" => 200
                 ));
             }
+
+            }
+
+
+
+
+
+            
         }
     }
 
@@ -270,13 +289,21 @@ class Controller_Peminjaman extends CI_Controller
 
         $ix = $s['item_code'];
 
-        $this->db->set('status', '0');
+        $this->db->set('status', 0);
         $this->db->where('item_code', $ix);
         $this->db->update('tb_items');
 
+        $sukses = $this->db->affected_rows();
 
-        $this->peminjaman->delete_by_out($id);
-        echo json_encode(array("status" => TRUE));
+        if ($sukses == 1) { 
+
+            $this->peminjaman->delete_by_out($id);
+            echo json_encode(array("status" => TRUE));
+
+
+        }
+
+     
     }
 
 
@@ -300,9 +327,10 @@ class Controller_Peminjaman extends CI_Controller
 
         $from_trx = $this->input->post('from_transaksi');
         $to_trx = $this->input->post('to_transaksi');
-        $dates = 'date';
-        $coba = $this->db->query('SELECT * FROM tb_pinjam where ' . $dates . ' >= "' . $from_trx . '" <= "' . $to_trx . '"');
-        $query = $coba;
+        $this->db->where('dates >=', $from_trx);
+        $this->db->where('dates <=', $to_trx);
+        $query = $this->db->get('tb_pinjam');
+
         $data = [];
         $no = 0;
 
@@ -328,7 +356,7 @@ class Controller_Peminjaman extends CI_Controller
 
             $row[] = $no;
             $row[] = $r->no_out;
-            $row[] = $r->date;
+            $row[] = $r->dates;
             $row[] = $r->employee_id;
 
             foreach ($xx->result() as $key) {
@@ -380,14 +408,15 @@ class Controller_Peminjaman extends CI_Controller
 
     public function get_data_transaksi()
     {
+        $draw = intval($this->input->get("draw"));
 
         $from_trx = $this->input->post('from_transaksi');
         $to_trx = $this->input->post('to_transaksi');
 
-        $draw = intval($this->input->get("draw"));
-        $dates = 'date';
-        $coba = $this->db->query('SELECT * FROM tb_pinjam where ' . $dates . ' >= "' . $from_trx . '" <= "' . $to_trx . '"');
-        $query = $coba;
+     
+        $this->db->where('dates >=', $from_trx);
+        $this->db->where('dates <=', $to_trx);
+        $query = $this->db->get('tb_pinjam');
 
         $data = [];
         $no = 0;
@@ -411,7 +440,7 @@ class Controller_Peminjaman extends CI_Controller
             $row = array();
             $row[] = $no;
             $row[] = $r->no_out;
-            $row[] = $r->date;
+            $row[] = $r->dates;
             $row[] = $r->no_return;
             $row[] = $r->date_ret;
             $row[] = $r->employee_id;
@@ -471,15 +500,16 @@ class Controller_Peminjaman extends CI_Controller
         // Datatables Variables
 
 
+
         $draw = intval($this->input->get("draw"));
 
         $from_trx = $this->input->post('from_transaksi');
         $to_trx = $this->input->post('to_transaksi');
-        $this->db->where('date >=', $from_trx);
-        $this->db->where('date <=', $to_trx . '24:00:00');
+        $this->db->where('dates >=', $from_trx);
+        $this->db->where('dates <=', $to_trx);
 
 
-        $this->db->order_by("id_out", "desc");
+        $this->db->order_by("no_out", "desc");
         $query = $this->db->get("tb_pinjam");
         $data = [];
         $no = 0;
@@ -503,7 +533,7 @@ class Controller_Peminjaman extends CI_Controller
             $row[] = $no;
 
             $row[] = $r->no_out;
-            $row[] = $r->date;
+            $row[] = $r->dates;
             $row[] = $r->employee_id;
             foreach ($xx->result() as $key) {
                 $row_name .= $key->employee_name;

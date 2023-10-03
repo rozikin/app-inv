@@ -65,7 +65,7 @@ class Controller_Pengembalian extends CI_Controller
             $row = array();
             $row[] = $no;
             $row[] = $r->no_return;
-            $row[] = $r->date;
+            $row[] = $r->dates;
             $row[] = $r->no_out;
             $row[] = $r->employee_id;
             foreach ($xx->result() as $key) {
@@ -107,47 +107,7 @@ class Controller_Pengembalian extends CI_Controller
         echo json_encode($data);
     }
 
-    // function get_data_pinjam($employee_id)
-    // {
-    //     $kode = $this->input->post('employee_id');
-    //     $draw = intval($this->input->get("draw"));
-    //     $this->db->where("employee_id", $employee_id);
-    //     $this->db->where("remark", "PINJAM");
-    //     $this->db->where("status", 1);
-    //     $query = $this->db->get("v_pinjam");
-    //     $data = [];
-    //     $no = 0;
 
-    //     foreach ($query->result() as $r) {
-    //         $no++;
-
-    //         $row = array();
-    //         $row[] = $no;
-    //         $row[] = $r->no_out;
-    //         $row[] = $r->date;
-    //         $row[] = $r->item_code;
-    //         $row[] = $r->item_description;
-
-    //         if ($r->remark == "PINJAM") {
-    //             $row[] = '<div class="text-danger">PINJAM</div>';
-    //         } else {
-    //             $row[] = 'KEMBALI';
-    //         }
-
-    //         $row[] = '<a class="pilih_data btn-sm" data-id="' . $r->no_out . '" data-code="' . $r->item_code . '" data-desc="' . $r->item_description . '" data-status="' . $r->status . '">' . 'select' . '</a>';
-    //         $data[] = $row;
-    //     };
-
-    //     $result = array(
-    //         "draw" => $draw,
-    //         "recordsTotal" => $query->num_rows(),
-    //         "recordsFiltered" => $query->num_rows(),
-    //         "data" => $data
-    //     );
-
-    //     echo json_encode($result);
-    //     exit();
-    // }
 
 
 
@@ -165,8 +125,8 @@ class Controller_Pengembalian extends CI_Controller
 
         $draw = intval($this->input->get("draw"));
 
-        $this->db->where('date >', date('d-m-Y 00:00:00'));
-        $this->db->where('date <', date('d-m-Y 24:00:00'));
+      
+        $this->db->like('dates', date('Y-m-d'));
         $this->db->order_by("id_retur", "desc");
         $query = $this->db->get("tb_kembali");
         $data = [];
@@ -189,7 +149,7 @@ class Controller_Pengembalian extends CI_Controller
             $row = array();
             $row[] = $no;
             $row[] = $r->no_return;
-            $row[] = $r->date;
+            $row[] = $r->dates;
             $row[] = $r->no_out;
             $row[] = $r->employee_id;
             foreach ($xx->result() as $key) {
@@ -252,49 +212,56 @@ class Controller_Pengembalian extends CI_Controller
 
         if ($cek0['status'] == 1) {
 
-            $no_id = $this->input->post('employee_id');
-            $sql = $this->db->query("SELECT employee_id FROM tb_pinjam where employee_id = '$no_id' ");
-            $cek = $sql->num_rows();
 
-            $no_item = $this->input->post('item_code');
-            $sqlx = $this->db->query("SELECT item_code FROM tb_pinjam where item_code = '$no_item' ");
-            $cek2 = $sqlx->num_rows();
+            $item_coded = $this->input->post('item_code');
+            $this->db->set('status', 0);
+            $this->db->where('item_code', $item_coded);
+            $this->db->update('tb_items');
 
-            if ($cek > 0  && $cek2 > 0) {
+            $sukses = $this->db->affected_rows();
 
+            if ($sukses == 1) {
 
-                $item_coded = $this->input->post('item_code');
-                $this->db->set('status', 0);
-                $this->db->where('item_code', $item_coded);
-                $this->db->update('tb_items');
+                $no_id = $this->input->post('employee_id');
+                $sql = $this->db->query("SELECT employee_id FROM tb_pinjam where employee_id = '$no_id' ");
+                $cek = $sql->num_rows();
 
+                $no_item = $this->input->post('item_code');
+                $sqlx = $this->db->query("SELECT item_code FROM tb_pinjam where item_code = '$no_item' ");
+                $cek2 = $sqlx->num_rows();
 
-                $no_out = $this->input->post('no_pinjam');
-                $no_retur = $nox;
-                $this->db->set('remark', 'KEMBALI');
-                $this->db->set('no_return', $no_retur);
-                $this->db->set('date_ret', date('d-m-Y H:i:s'));
-                $this->db->where('no_out', $no_out);
-                $this->db->update('tb_pinjam');
-
-
-                $data = [
-                    'no_return' => $nox,
-                    'date' => date('d-m-Y H:i:s'),
-                    'employee_id' => $this->input->post('employee_id'),
-                    'item_code' => $this->input->post('item_code'),
-                    'no_out' => $this->input->post('no_pinjam'),
-                    'remark' => '',
-
-                ];
-
-                $this->db->insert('tb_kembali', $data);
+                if ($cek > 0  && $cek2 > 0) {
 
 
 
-                echo json_encode(array(
-                    "statusCode" => 200
-                ));
+
+                    $no_out = $this->input->post('no_pinjam');
+                    $no_retur = $nox;
+                    $this->db->set('remark', 'KEMBALI');
+                    $this->db->set('no_return', $no_retur);
+                    $this->db->set('date_ret', date('Y-m-d H:i:s'));
+                    $this->db->where('no_out', $no_out);
+                    $this->db->update('tb_pinjam');
+
+
+                    $data = [
+                        'no_return' => $nox,
+                        'dates' => date('Y-m-d H:i:s'),
+                        'employee_id' => $this->input->post('employee_id'),
+                        'item_code' => $this->input->post('item_code'),
+                        'no_out' => $this->input->post('no_pinjam'),
+                        'remark' => '',
+
+                    ];
+
+                    $this->db->insert('tb_kembali', $data);
+
+
+
+                    echo json_encode(array(
+                        "statusCode" => 200
+                    ));
+                }
             }
         }
     }
@@ -310,20 +277,6 @@ class Controller_Pengembalian extends CI_Controller
     }
 
 
-    public function edit_material_out($id = null)
-    {
-        $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
-        $data['title'] = 'Edit Material Out';
-        $data['po'] = $this->pengembalian->get_id_out($id);
-        $data['podetil'] = $this->pengembalian->get_detil_out($id);
-        $data['itemtrim'] = $this->pengembalian->get_item();
-
-
-        $this->load->view('template_oznet/header', $data);
-        $this->load->view('template_oznet/sidebar', $data);
-        $this->load->view('administrator/pengembalian/edit_material_out', $data);
-        $this->load->view('template_oznet/footer');
-    }
 
 
 
@@ -379,9 +332,16 @@ class Controller_Pengembalian extends CI_Controller
 
         $from_trx = $this->input->post('from_transaksi');
         $to_trx = $this->input->post('to_transaksi');
-        $dates = 'date';
-        $coba = $this->db->query('SELECT * FROM tb_pinjam where ' . $dates . ' >= "' . $from_trx . '" <= "' . $to_trx . '"');
-        $query = $coba;
+
+        $this->db->where('dates >=', $from_trx);
+        $this->db->where('dates <=', $to_trx);
+        $query = $this->db->get('tb_kembali');
+
+
+
+
+        // $coba = $this->db->query('SELECT * FROM tb_kembali where dates >== "' . $fr . '" AND "' . $to . '"');
+        // $query = $coba;
         $data = [];
         $no = 0;
 
@@ -407,7 +367,7 @@ class Controller_Pengembalian extends CI_Controller
             $row = array();
             $row[] = $no;
             $row[] = $r->no_return;
-            $row[] = $r->date;
+            $row[] = $r->dates;
             $row[] = $r->no_out;
             $row[] = $r->employee_id;
             foreach ($xx->result() as $key) {
@@ -462,8 +422,8 @@ class Controller_Pengembalian extends CI_Controller
 
         $from_trx = $this->input->post('from_transaksi');
         $to_trx = $this->input->post('to_transaksi');
-        $this->db->where('date >=', $from_trx);
-        $this->db->where('date <=', $to_trx . '24:00:00');
+        $this->db->where('dates >==', $from_trx);
+        $this->db->where('dates <==', $to_trx . '24:00:00');
 
         $this->db->order_by("id_retur", "desc");
         $query = $this->db->get("tb_kembali");
@@ -491,7 +451,7 @@ class Controller_Pengembalian extends CI_Controller
             $row[] = $no;
 
             $row[] = $r->no_return;
-            $row[] = $r->date;
+            $row[] = $r->dates;
             $row[] = $r->no_out;
             $row[] = $r->employee_id;
             foreach ($xx->result() as $key) {

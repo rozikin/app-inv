@@ -91,8 +91,7 @@ class Admin extends CI_Controller
 
 		date_default_timezone_set('Asia/Jakarta');
 
-		$this->db->where('date >', date('d-m-Y 00:00:00'));
-		$this->db->where('date <', date('d-m-Y 24:00:00'));
+		$this->db->like('dates', date('Y-m-d'));
 		$this->db->where('remark', 'PINJAM');
 		$data = $this->db->get('tb_pinjam')->num_rows();
 
@@ -110,8 +109,7 @@ class Admin extends CI_Controller
 
 
 
-		$this->db->where('date >', date('d-m-Y 00:00:00'));
-		$this->db->where('date <', date('d-m-Y 24:00:00'));
+	$this->db->like('dates', date('Y-m-d'));
 		$this->db->where('remark', 'PINJAM');
 		$data_pinjam_hari_ini = $this->db->get('tb_pinjam')->num_rows();
 
@@ -132,8 +130,7 @@ class Admin extends CI_Controller
 
 		date_default_timezone_set('Asia/Jakarta');
 
-		$this->db->where('date >', date('d-m-Y 00:00:00'));
-		$this->db->where('date <', date('d-m-Y 24:00:00'));
+	$this->db->like('dates', date('Y-m-d'));
 		// $this->db->where('remark', 'PINJAM');
 		$data = $this->db->get('tb_kembali')->num_rows();
 
@@ -152,8 +149,7 @@ class Admin extends CI_Controller
 
 		date_default_timezone_set('Asia/Jakarta');
 
-		$this->db->where('date >', date('d-m-Y 00:00:00'));
-		$this->db->where('date <', date('d-m-Y 24:00:00'));
+	$this->db->like('dates', date('Y-m-d'));
 		$this->db->like('remark', 'PINJAM');
 		$this->db->like('item_code', 'SEW');
 		$data = $this->db->get('tb_pinjam')->num_rows();
@@ -169,8 +165,7 @@ class Admin extends CI_Controller
 
 		date_default_timezone_set('Asia/Jakarta');
 
-		$this->db->where('date >', date('d-m-Y 00:00:00'));
-		$this->db->where('date <', date('d-m-Y 24:00:00'));
+	$this->db->like('dates', date('Y-m-d'));
 		$this->db->like('remark', 'PINJAM');
 		$this->db->group_start()->like('item_code', 'QC')->or_group_start()->like('item_code', 'FAB')->group_end()
 			->group_end();
@@ -188,8 +183,7 @@ class Admin extends CI_Controller
 
 		date_default_timezone_set('Asia/Jakarta');
 
-		$this->db->where('date >', date('d-m-Y 00:00:00'));
-		$this->db->where('date <', date('d-m-Y 24:00:00'));
+	$this->db->like('dates', date('Y-m-d'));
 		$this->db->like('remark', 'PINJAM');
 		$this->db->like('item_code', 'PACK');
 		$data = $this->db->get('tb_pinjam')->num_rows();
@@ -205,8 +199,7 @@ class Admin extends CI_Controller
 
 		date_default_timezone_set('Asia/Jakarta');
 
-		$this->db->where('date >', date('d-m-Y 00:00:00'));
-		$this->db->where('date <', date('d-m-Y 24:00:00'));
+	$this->db->like('dates', date('Y-m-d'));
 		$this->db->like('remark', 'PINJAM');
 		$this->db->like('item_code', 'CUT');
 		$data = $this->db->get('tb_pinjam')->num_rows();
@@ -221,8 +214,7 @@ class Admin extends CI_Controller
 
 		date_default_timezone_set('Asia/Jakarta');
 
-		$this->db->where('date >', date('d-m-Y 00:00:00'));
-		$this->db->where('date <', date('d-m-Y 24:00:00'));
+	$this->db->like('dates', date('Y-m-d'));
 		$this->db->like('remark', 'PINJAM');
 		$this->db->like('item_code', 'MEK');
 		$data = $this->db->get('tb_pinjam')->num_rows();
@@ -237,8 +229,7 @@ class Admin extends CI_Controller
 
 		date_default_timezone_set('Asia/Jakarta');
 
-		$this->db->where('date >', date('d-m-Y 00:00:00'));
-		$this->db->where('date <', date('d-m-Y 24:00:00'));
+	$this->db->like('dates', date('Y-m-d'));
 		$this->db->like('remark', 'PINJAM');
 		$this->db->like('item_code', 'SPL');
 		$data = $this->db->get('tb_pinjam')->num_rows();
@@ -253,8 +244,7 @@ class Admin extends CI_Controller
 
 		date_default_timezone_set('Asia/Jakarta');
 
-		$this->db->where('date >', date('d-m-Y 00:00:00'));
-		$this->db->where('date <', date('d-m-Y 24:00:00'));
+	$this->db->like('dates', date('Y-m-d'));
 		$this->db->like('remark', 'PINJAM');
 		$this->db->like('item_code', 'WH');
 		$data = $this->db->get('tb_pinjam')->num_rows();
@@ -389,8 +379,7 @@ class Admin extends CI_Controller
 
 		$draw = intval($this->input->get("draw"));
 
-		$this->db->where('date >', date('d-m-Y 00:00:00'));
-		$this->db->where('date <', date('d-m-Y 24:00:00'));
+	$this->db->like('dates', date('Y-m-d'));
 		$this->db->where('remark', 'PINJAM');
 		$this->db->order_by("id_out", "desc");
 		$query = $this->db->get("tb_pinjam");
@@ -405,7 +394,7 @@ class Admin extends CI_Controller
 			$row[] = $no;
 
 			$row[] = $r->no_out;
-			$row[] = $r->date;
+			$row[] = $r->dates;
 			$row[] = $r->no_return;
 			$row[] = $r->date_ret;
 			$row[] = $r->employee_id;

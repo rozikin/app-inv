@@ -177,8 +177,7 @@ function delete_data(id) {
         if (result.isConfirmed) {
 
             $.ajax({
-                url: "<?php echo site_url('Controller_Peminjaman/remove_material_out') ?>/" +
-                    id,
+                url: "<?php echo site_url('Controller_Peminjaman/remove_material_out') ?>/" + id,
                 type: "POST",
                 dataType: "JSON",
                 success: function(data) {
