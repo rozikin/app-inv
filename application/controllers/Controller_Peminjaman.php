@@ -214,13 +214,13 @@ class Controller_Peminjaman extends CI_Controller
 
         if ($cek0['status'] == 0) {
 
-            $sqlw = $this->db->query("SELECT no_out FROM tb_pinjam where no_out = '$nox'");
+            $sqlw = $this->db->query("SELECT * FROM tb_pinjam where no_out = '$nox' and dates =  date('Y-m-d H:i:s') ");
             $cek0z = $sqlw->num_rows();
 
 
             if($cek0z == 0){
 
-                $no_id = $this->input->post('employee_id');
+            $no_id = $this->input->post('employee_id');
             $sql = $this->db->query("SELECT employee_id FROM tb_employee where employee_id = '$no_id' ");
             $cek = $sql->num_rows();
 
@@ -293,15 +293,12 @@ class Controller_Peminjaman extends CI_Controller
         $this->db->where('item_code', $ix);
         $this->db->update('tb_items');
 
-        $sukses = $this->db->affected_rows();
-
-        if ($sukses == 1) { 
 
             $this->peminjaman->delete_by_out($id);
             echo json_encode(array("status" => TRUE));
 
 
-        }
+        
 
      
     }

@@ -3,7 +3,7 @@
         font-family: sans-serif;
         color: #444;
         border-collapse: collapse;
-        width: 50%;
+        width: 25%;
         border: 1px solid #f2f5f7;
     }
 
@@ -16,7 +16,7 @@
     .table1,
     th,
     td {
-        padding: 8px 20px;
+        padding: 1px 5px;
         text-align: center;
     }
 
@@ -110,9 +110,9 @@
 
 
                     <div class="row mb-3">
-                        <div class="col-8">
+                        <div class="col-12">
                             <h6>Peminjaman Hari ini</h6>
-                            <table class="table1">
+                            <table class="table1 table">
                                 <tr>
                                     <th>SEWING</th>
                                     <th>QC</th>
@@ -123,7 +123,7 @@
                                     <th>WAREHOUSE</th>
                                     <th>PINJAM_NOW</th>
                                     <th>REUTRN_NOW</th>
-                                    <th>KEMARIN_BLM_KEMBALI</th>
+                                    <th>KMRN_BLM_KBLI</th>
 
                                 </tr>
                                 <tr>
@@ -147,11 +147,7 @@
 
                         </div>
 
-                        <div class="col-4">
-
-
-
-                        </div>
+                        
 
 
 
