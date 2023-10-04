@@ -15,7 +15,7 @@ class Controller_Peminjaman extends CI_Controller
     {
         $data['title'] = 'peminjaman';
 
-       $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+        $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
         // $data['pinjam'] = $this->peminjaman->get_out();
 
         $this->load->view('template_oznet/header', $data);
@@ -29,9 +29,8 @@ class Controller_Peminjaman extends CI_Controller
         $this->peminjaman->hapusDataOut($id);
         $this->session->set_flashdata('message', '<div class= "alert alert-success" role="alert">data pinjam deleted</div>');
         redirect('Controller_peminjaman/material_out');
-
     }
- 
+
 
 
     public function kode_otomatis_no_out()
@@ -214,11 +213,6 @@ class Controller_Peminjaman extends CI_Controller
 
         if ($cek0['status'] == 0) {
 
-            $sqlw = $this->db->query("SELECT * FROM tb_pinjam where no_out = '$nox' and dates =  date('Y-m-d H:i:s') ");
-            $cek0z = $sqlw->num_rows();
-
-
-            if($cek0z == 0){
 
             $no_id = $this->input->post('employee_id');
             $sql = $this->db->query("SELECT employee_id FROM tb_employee where employee_id = '$no_id' ");
@@ -245,25 +239,31 @@ class Controller_Peminjaman extends CI_Controller
 
 
                 $this->db->insert('tb_pinjam', $data);
+                $sukses = $this->db->affected_rows();
 
+                if ($sukses == 1) {
 
-                $item_code = $this->input->post('item_code');
-                $this->db->set('status', '1');
-                $this->db->where('item_code', $item_code);
-                $this->db->update('tb_items');
+                    $item_code = $this->input->post('item_code');
+                    $this->db->set('status', 1);
+                    $this->db->where('item_code', $item_code);
+                    $this->db->update('tb_items');
+                } else {
+
+                    echo json_encode(array(
+                        "statusCode" => 201
+                    ));
+
+                }
+
 
                 echo json_encode(array(
                     "statusCode" => 200
                 ));
+            } else {
+                echo json_encode(array(
+                    "statusCode" => 201
+                ));
             }
-
-            }
-
-
-
-
-
-            
         }
     }
 
@@ -294,13 +294,8 @@ class Controller_Peminjaman extends CI_Controller
         $this->db->update('tb_items');
 
 
-            $this->peminjaman->delete_by_out($id);
-            echo json_encode(array("status" => TRUE));
-
-
-        
-
-     
+        $this->peminjaman->delete_by_out($id);
+        echo json_encode(array("status" => TRUE));
     }
 
 
@@ -410,7 +405,7 @@ class Controller_Peminjaman extends CI_Controller
         $from_trx = $this->input->post('from_transaksi');
         $to_trx = $this->input->post('to_transaksi');
 
-     
+
         $this->db->where('dates >=', $from_trx);
         $this->db->where('dates <=', $to_trx);
         $query = $this->db->get('tb_pinjam');

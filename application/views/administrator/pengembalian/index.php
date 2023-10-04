@@ -465,8 +465,7 @@
                         var dataResult = JSON.parse(dataResult);
                         if (dataResult.statusCode == 200) {
 
-                            // kd_otomatis_no_return();
-
+                           
                             toastr.success(
                                 'data berhasil disimpan!'
                             );

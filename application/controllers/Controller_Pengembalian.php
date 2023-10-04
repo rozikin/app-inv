@@ -213,15 +213,6 @@ class Controller_Pengembalian extends CI_Controller
         if ($cek0['status'] == 1) {
 
 
-            $item_coded = $this->input->post('item_code');
-            $this->db->set('status', 0);
-            $this->db->where('item_code', $item_coded);
-            $this->db->update('tb_items');
-
-            $sukses = $this->db->affected_rows();
-
-            if ($sukses == 1) {
-
                 $no_id = $this->input->post('employee_id');
                 $sql = $this->db->query("SELECT employee_id FROM tb_pinjam where employee_id = '$no_id' ");
                 $cek = $sql->num_rows();
@@ -232,18 +223,7 @@ class Controller_Pengembalian extends CI_Controller
 
                 if ($cek > 0  && $cek2 > 0) {
 
-
-
-
-                    $no_out = $this->input->post('no_pinjam');
-                    $no_retur = $nox;
-                    $this->db->set('remark', 'KEMBALI');
-                    $this->db->set('no_return', $no_retur);
-                    $this->db->set('date_ret', date('Y-m-d H:i:s'));
-                    $this->db->where('no_out', $no_out);
-                    $this->db->update('tb_pinjam');
-
-
+                
                     $data = [
                         'no_return' => $nox,
                         'dates' => date('Y-m-d H:i:s'),
@@ -256,13 +236,40 @@ class Controller_Pengembalian extends CI_Controller
 
                     $this->db->insert('tb_kembali', $data);
 
+                    $sukses = $this->db->affected_rows();
 
+                    if ($sukses == 1) {
 
+                        $item_coded = $this->input->post('item_code');
+                        $this->db->set('status', 0);
+                        $this->db->where('item_code', $item_coded);
+                        $this->db->update('tb_items');
+    
+    
+                        $no_out = $this->input->post('no_pinjam');
+                        $no_retur = $nox;
+                        $this->db->set('remark', 'KEMBALI');
+                        $this->db->set('no_return', $no_retur);
+                        $this->db->set('date_ret', date('Y-m-d H:i:s'));
+                        $this->db->where('no_out', $no_out);
+                        $this->db->update('tb_pinjam');
+    
+                    }else{
+                        echo json_encode(array(
+                            "statusCode" => 201
+                        ));
+                    }
+
+                    
                     echo json_encode(array(
                         "statusCode" => 200
                     ));
+                }else{
+                    echo json_encode(array(
+                        "statusCode" => 201
+                    ));
                 }
-            }
+            
         }
     }
 
