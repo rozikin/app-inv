@@ -247,23 +247,12 @@ class Controller_Peminjaman extends CI_Controller
                     $this->db->set('status', 1);
                     $this->db->where('item_code', $item_code);
                     $this->db->update('tb_items');
-                } else {
-
-                    echo json_encode(array(
-                        "statusCode" => 201
-                    ));
-
-                }
-
+                } 
 
                 echo json_encode(array(
                     "statusCode" => 200
                 ));
-            } else {
-                echo json_encode(array(
-                    "statusCode" => 201
-                ));
-            }
+            } 
         }
     }
 

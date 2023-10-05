@@ -254,19 +254,11 @@ class Controller_Pengembalian extends CI_Controller
                         $this->db->where('no_out', $no_out);
                         $this->db->update('tb_pinjam');
     
-                    }else{
-                        echo json_encode(array(
-                            "statusCode" => 201
-                        ));
                     }
 
                     
                     echo json_encode(array(
                         "statusCode" => 200
-                    ));
-                }else{
-                    echo json_encode(array(
-                        "statusCode" => 201
                     ));
                 }
             
@@ -297,7 +289,7 @@ class Controller_Pengembalian extends CI_Controller
         $s = $this->db->get('tb_kembali')->row_array();
 
         $ix = $s['item_code'];
-        $this->db->set('status', '1');
+        $this->db->set('status', 1);
         $this->db->where('item_code', $ix);
         $this->db->update('tb_items');
 

@@ -221,7 +221,7 @@ class Controller_Employee extends CI_Controller
 				$highestColumn = $worksheet->getHighestColumn();
 
 
-				for ($row = 3; $row <= $highestRow; $row++) {
+				for ($row = 2; $row <= $highestRow; $row++) {
 					$kode = $worksheet->getCellByColumnAndRow(0, $row)->getValue();
 					$description = $worksheet->getCellByColumnAndRow(1, $row)->getValue();
 					$department = $worksheet->getCellByColumnAndRow(2, $row)->getValue();
