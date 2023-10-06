@@ -109,8 +109,6 @@ class Controller_Pengembalian extends CI_Controller
 
 
 
-
-
     function get_data_kode()
     {
         $kode = $this->input->post('item_code');
@@ -278,9 +276,6 @@ class Controller_Pengembalian extends CI_Controller
 
 
 
-
-
-
     public function remove_material_return($id)
     {
         //delete fil
@@ -421,8 +416,8 @@ class Controller_Pengembalian extends CI_Controller
 
         $from_trx = $this->input->post('from_transaksi');
         $to_trx = $this->input->post('to_transaksi');
-        $this->db->where('dates >==', $from_trx);
-        $this->db->where('dates <==', $to_trx . '24:00:00');
+        $this->db->where('dates >=', $from_trx);
+        $this->db->where('dates <=', $to_trx);
 
         $this->db->order_by("id_retur", "desc");
         $query = $this->db->get("tb_kembali");

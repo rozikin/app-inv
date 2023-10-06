@@ -396,7 +396,6 @@
         var pl = document.getElementById('remark');
 
 
-
         px.onchange = function() {
             var item_code = $(this).val();
 
@@ -431,8 +430,6 @@
                 }
             });
         }
-
-
 
 
 
@@ -482,7 +479,7 @@
                     }
                 });
 
-            } else if (status == "") {
+            } else if (status == "KEMBALI") {
 
                 toastr.error('Barang tidak dipinjam / sudah kembali!');
 

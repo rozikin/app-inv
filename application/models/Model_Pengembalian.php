@@ -90,8 +90,6 @@ class Model_Pengembalian extends CI_Model
                 $row_status = '';
                 $row_desc = '';
 
-
-
                 foreach ($xx->result() as $key) {
                     $row_status .= $key->status;
                     $row_desc .= $key->item_description;
