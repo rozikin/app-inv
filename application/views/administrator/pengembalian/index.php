@@ -395,7 +395,6 @@
         var px = document.getElementById('item_code');
         var pl = document.getElementById('remark');
 
-
         px.onchange = function() {
             var item_code = $(this).val();
 
@@ -453,7 +452,8 @@
                         // no_return: no_return,
                         employee_id: employee_id,
                         no_pinjam: no_pinjam,
-                        item_code: item_code
+                        item_code: item_code,
+                        remark: status
                     },
                     cache: false,
                     success: function(dataResult) {
@@ -474,14 +474,17 @@
                             $('#simpan').prop('disabled', true);
 
                         } else if (dataResult.statusCode == 201) {
-                            alert("Error occured !");
+                            toastr.error('Tidak ditemukan transaksi ini');
+                            bersihkan_input();
+                          
                         }
                     }
                 });
 
-            } else if (status == "KEMBALI") {
+            } else if (employee_id != "" && no_pinjam != "" && item_code != "" && status == "KEMBALI") {
 
                 toastr.error('Barang tidak dipinjam / sudah kembali!');
+                bersihkan_input();
 
 
 

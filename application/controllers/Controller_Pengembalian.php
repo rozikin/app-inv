@@ -108,7 +108,6 @@ class Controller_Pengembalian extends CI_Controller
     }
 
 
-
     function get_data_kode()
     {
         $kode = $this->input->post('item_code');
@@ -205,21 +204,24 @@ class Controller_Pengembalian extends CI_Controller
         $nox =  $this->pengembalian->buat_kode_no_return();
 
         $no_itemx = $this->input->post('item_code');
-        $sqlx = $this->db->query("SELECT * FROM tb_items where item_code = '$no_itemx' ");
-        $cek0 = $sqlx->row_array();
+        $no_pinjam =  $this->input->post('no_pinjam');
+        $employee_id =  $this->input->post('employee_id');
+        $remark =  $this->input->post('remark');
+        $sqlx = $this->db->query("SELECT * FROM tb_pinjam where item_code = '$no_itemx' and no_out = '$no_pinjam' and employee_id = '$employee_id' and remark = '$remark'");
+        $cek0 = $sqlx->num_rows();
 
-        if ($cek0['status'] == 1) {
+        if ($cek0 > 0) {
 
 
-                $no_id = $this->input->post('employee_id');
-                $sql = $this->db->query("SELECT employee_id FROM tb_pinjam where employee_id = '$no_id' ");
-                $cek = $sql->num_rows();
+                // $no_id = $this->input->post('employee_id');
+                // $sql = $this->db->query("SELECT employee_id FROM tb_pinjam where employee_id = '$no_id' ");
+                // $cek = $sql->num_rows();
 
-                $no_item = $this->input->post('item_code');
-                $sqlx = $this->db->query("SELECT item_code FROM tb_pinjam where item_code = '$no_item' ");
-                $cek2 = $sqlx->num_rows();
+                // $no_item = $this->input->post('item_code');
+                // $sqlx = $this->db->query("SELECT item_code FROM tb_pinjam where item_code = '$no_item' ");
+                // $cek2 = $sqlx->num_rows();
 
-                if ($cek > 0  && $cek2 > 0) {
+                // if ($cek > 0  && $cek2 > 0) {
 
                 
                     $data = [
@@ -258,8 +260,13 @@ class Controller_Pengembalian extends CI_Controller
                     echo json_encode(array(
                         "statusCode" => 200
                     ));
-                }
+                // }
             
+        } else {
+              
+            echo json_encode(array(
+                "statusCode" => 201
+            ));
         }
     }
 

@@ -97,10 +97,11 @@ class Model_Pengembalian extends CI_Model
 
 
                 $hasil = array(
+                    'no_out' => $data->no_out,
                     'item_code' => $data->item_code,
                     'item_description' => $row_desc,
                     'status' => $row_status,
-                    'no_out' => $data->no_out,
+                   
 
                 );
             }
