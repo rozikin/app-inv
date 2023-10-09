@@ -709,11 +709,11 @@ class Controller_Item extends CI_Controller
 			};
 			$row[] = $row_unit;
 			$row[] = $r->linex;
-			$row[] = $r->status == 1 ? 'DIPINJAM' : 'KEMBALI';
-
+			$row[] = $r->status == 1 ? '<a class="badge badge-danger">' .'DIPINJAM'. '</a>' : '<a class="badge badge-success">' .'KEMBALI'. '</a>';
 
 			$data[] = $row;
 		};
+
 
 
 

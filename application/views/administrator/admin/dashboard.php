@@ -114,13 +114,14 @@
                             <h6>Peminjaman Hari ini</h6>
                             <table class="table1 table">
                                 <tr>
-                                    <th>SEWING</th>
+                                    <th>SEW</th>
                                     <th>QC</th>
-                                    <th>PACKING</th>
-                                    <th>CUTTING</th>
-                                    <th>MEKANIK</th>
-                                    <th>SAMPLE</th>
-                                    <th>WAREHOUSE</th>
+                                    <th>PACK</th>
+                                    <th>CUTT</th>
+                                    <th>MKN</th>
+                                    <th>SPL</th>
+                                    <th>WH</th>
+                                    <th>FOLD</th>
                                     <th>PINJAM_NOW</th>
                                     <th>REUTRN_NOW</th>
                                     <th>KMRN_BLM_KBLI</th>
@@ -134,6 +135,7 @@
                                     <td id="put_mekanik"></td>
                                     <td id="put_sample"></td>
                                     <td id="put_wh"></td>
+                                    <td id="put_folding"></td>
                                     <td id="put_pinjam_hari_ini"></td>
                                     <td id="put_kembali_hari_ini"></td>
                                     <td id="put_kemarin"></td>
@@ -147,7 +149,7 @@
 
                         </div>
 
-                        
+
 
 
 
@@ -165,11 +167,11 @@
                                 <th>NO RT</th>
                                 <th>DATE RT</th>
                                 <th>EMP ID</th>
-                                <!-- <th>NAME</th>
-                                <th>DEPT.</th>
-                                <th>LINE.</th> -->
+                                <th>NAME</th>
+                                <!-- <th>DEPT.</th> -->
+                                <!-- <th>LINE.</th> -->
                                 <th>ITEM CODE.</th>
-                                <!-- <th>Desc.</th> -->
+                                <!-- <th>DESC</th> -->
                                 <th>STATUS</th>
                             </tr>
                         </thead>
@@ -237,6 +239,7 @@
         get_ct_mekanik();
         get_ct_sample();
         get_ct_wh();
+        get_ct_folding();
         get_ct_qc();
         get_pinjam_hari_ini();
         get_kembali_hari_ini();
@@ -437,6 +440,24 @@
             }
         });
     }
+
+    function get_ct_folding() {
+
+        $.ajax({
+            url: "<?php echo site_url('Admin/get_ct_folding') ?>/",
+            type: "POST",
+            success: function(result) {
+                var data = $.parseJSON(result);
+
+                var hii = document.getElementById("put_folding");
+                hii.innerHTML = data.message;
+            }
+        });
+    }
+
+
+
+
 
 
     function get_pinjam_hari_ini() {

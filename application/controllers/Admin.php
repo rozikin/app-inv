@@ -109,7 +109,7 @@ class Admin extends CI_Controller
 
 
 
-	$this->db->like('dates', date('Y-m-d'));
+		$this->db->like('dates', date('Y-m-d'));
 		$this->db->where('remark', 'PINJAM');
 		$data_pinjam_hari_ini = $this->db->get('tb_pinjam')->num_rows();
 
@@ -130,7 +130,7 @@ class Admin extends CI_Controller
 
 		date_default_timezone_set('Asia/Jakarta');
 
-	$this->db->like('dates', date('Y-m-d'));
+		$this->db->like('dates', date('Y-m-d'));
 		// $this->db->where('remark', 'PINJAM');
 		$data = $this->db->get('tb_kembali')->num_rows();
 
@@ -142,14 +142,13 @@ class Admin extends CI_Controller
 
 
 
-
 	function get_ct_sweing()
 	{
 
 
 		date_default_timezone_set('Asia/Jakarta');
 
-	$this->db->like('dates', date('Y-m-d'));
+		$this->db->like('dates', date('Y-m-d'));
 		$this->db->like('remark', 'PINJAM');
 		$this->db->like('item_code', 'SEW');
 		$data = $this->db->get('tb_pinjam')->num_rows();
@@ -165,7 +164,7 @@ class Admin extends CI_Controller
 
 		date_default_timezone_set('Asia/Jakarta');
 
-	$this->db->like('dates', date('Y-m-d'));
+		$this->db->like('dates', date('Y-m-d'));
 		$this->db->like('remark', 'PINJAM');
 		$this->db->group_start()->like('item_code', 'QC')->or_group_start()->like('item_code', 'FAB')->group_end()
 			->group_end();
@@ -183,7 +182,7 @@ class Admin extends CI_Controller
 
 		date_default_timezone_set('Asia/Jakarta');
 
-	$this->db->like('dates', date('Y-m-d'));
+		$this->db->like('dates', date('Y-m-d'));
 		$this->db->like('remark', 'PINJAM');
 		$this->db->like('item_code', 'PACK');
 		$data = $this->db->get('tb_pinjam')->num_rows();
@@ -199,7 +198,7 @@ class Admin extends CI_Controller
 
 		date_default_timezone_set('Asia/Jakarta');
 
-	$this->db->like('dates', date('Y-m-d'));
+		$this->db->like('dates', date('Y-m-d'));
 		$this->db->like('remark', 'PINJAM');
 		$this->db->like('item_code', 'CUT');
 		$data = $this->db->get('tb_pinjam')->num_rows();
@@ -214,7 +213,7 @@ class Admin extends CI_Controller
 
 		date_default_timezone_set('Asia/Jakarta');
 
-	$this->db->like('dates', date('Y-m-d'));
+		$this->db->like('dates', date('Y-m-d'));
 		$this->db->like('remark', 'PINJAM');
 		$this->db->like('item_code', 'MEK');
 		$data = $this->db->get('tb_pinjam')->num_rows();
@@ -229,7 +228,7 @@ class Admin extends CI_Controller
 
 		date_default_timezone_set('Asia/Jakarta');
 
-	$this->db->like('dates', date('Y-m-d'));
+		$this->db->like('dates', date('Y-m-d'));
 		$this->db->like('remark', 'PINJAM');
 		$this->db->like('item_code', 'SPL');
 		$data = $this->db->get('tb_pinjam')->num_rows();
@@ -244,7 +243,7 @@ class Admin extends CI_Controller
 
 		date_default_timezone_set('Asia/Jakarta');
 
-	$this->db->like('dates', date('Y-m-d'));
+		$this->db->like('dates', date('Y-m-d'));
 		$this->db->like('remark', 'PINJAM');
 		$this->db->like('item_code', 'WH');
 		$data = $this->db->get('tb_pinjam')->num_rows();
@@ -254,17 +253,21 @@ class Admin extends CI_Controller
 		echo json_encode(array("message" => $message));
 	}
 
+	function get_ct_folding()
+	{
 
 
+		date_default_timezone_set('Asia/Jakarta');
 
+		$this->db->like('dates', date('Y-m-d'));
+		$this->db->like('remark', 'PINJAM');
+		$this->db->like('item_code', 'FOLD');
+		$data = $this->db->get('tb_pinjam')->num_rows();
 
+		$message = '<h6>' . $data . '</h6>';
 
-
-
-
-
-
-
+		echo json_encode(array("message" => $message));
+	}
 
 
 
@@ -371,7 +374,6 @@ class Admin extends CI_Controller
 		redirect('client');
 	}
 
-
 	public function get_data_transaksi()
 	{
 
@@ -379,7 +381,7 @@ class Admin extends CI_Controller
 
 		$draw = intval($this->input->get("draw"));
 
-	$this->db->like('dates', date('Y-m-d'));
+		$this->db->like('dates', date('Y-m-d'));
 		$this->db->where('remark', 'PINJAM');
 		$this->db->order_by("id_out", "desc");
 		$query = $this->db->get("tb_pinjam");
@@ -387,6 +389,23 @@ class Admin extends CI_Controller
 		$no = 0;
 
 		foreach ($query->result() as $r) {
+
+			
+            $this->db->where('employee_id', $r->employee_id);
+            $xx = $this->db->get('tb_employee');
+            $this->db->where('item_code', $r->item_code);
+            $s = $this->db->get('tb_items');
+
+            $row_item_desc = '';
+            $row_name = '';
+            $row_department = '';
+            $row_line = '';
+
+
+
+
+
+
 			$no++;
 
 			$row = array();
@@ -398,11 +417,23 @@ class Admin extends CI_Controller
 			$row[] = $r->no_return;
 			$row[] = $r->date_ret;
 			$row[] = $r->employee_id;
-			// $row[] = $r->employee_name;
-			// $row[] = $r->department;
-			// $row[] = $r->line;
+			foreach ($xx->result() as $key) {
+                $row_name .= $key->employee_name;
+                $row_department .= $key->department;
+            
+            };
+
+			$row[] = $row_name;
+            // $row[] = $row_department;
+
+
 			$row[] = $r->item_code;
-			// $row[] = $r->item_description;
+			foreach ($s->result() as $key) {
+                $row_item_desc .= $key->item_description;
+            };
+
+			// $row[] = $row_item_desc;
+
 			$row[] = $r->remark == 'PINJAM' ? '<a class="badge badge-danger">' . $r->remark . '</a>' : '<a class="badge badge-success">' . $r->remark . '</a>';
 			$data[] = $row;
 		};
