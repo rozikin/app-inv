@@ -209,29 +209,16 @@
 
 
     $(document).ready(function() {
-        table = $('#example6').DataTable({
-            "responsive": true,
-            "autoWidth": false,
-            "dom": 'Bfrtip',
-            "buttons": ["excel", "colvis"],
-
-            "ajax": {
-                url: '<?php echo site_url('Admin/get_data_transaksi') ?>',
-                type: 'POST'
-            }
-        }).buttons().container().appendTo('#example6_wrapper .col-md-6:eq(0)');
+       
 
 
-
-
-
+        get_data_trans()
+      
         get_item();
         get_employee();
 
         get_peminjaman();
         get_item_pinjam();
-
-
 
         get_ct_sweing();
         get_ct_packing();
@@ -260,6 +247,25 @@
 
     }
 
+    function get_data_trans(){
+        table = $('#example6').DataTable({
+            "responsive": true,
+            "autoWidth": false,
+            "dom": 'Bfrtip',
+            "buttons": ["excel", "colvis"],
+            destroy: true,
+
+            "ajax": {
+                url: '<?php echo site_url('Admin/get_data_transaksi') ?>',
+                type: 'POST'
+            }
+        }).buttons().container().appendTo('#example6_wrapper .col-md-6:eq(0)');
+
+        setTimeout('get_data_trans()', 300000);
+
+
+    }
+
 
     function get_employee() {
 
@@ -273,6 +279,7 @@
                 hii.innerHTML = data.message;
             }
         });
+        setTimeout('get_employee()', 100000);
     }
 
     function get_item() {
@@ -287,6 +294,7 @@
                 hii.innerHTML = data.message;
             }
         });
+        setTimeout('get_item()', 100000);
     }
 
 
@@ -302,6 +310,7 @@
                 hii.innerHTML = data.message;
             }
         });
+        setTimeout('get_peminjaman()', 100000);
     }
 
     function get_item_pinjam() {
@@ -316,6 +325,7 @@
                 hii.innerHTML = data.message;
             }
         });
+        setTimeout('get_item_pinjam)', 100000);
     }
 
     function get_belum_kembali() {
@@ -330,13 +340,8 @@
                 hii.innerHTML = data.message;
             }
         });
+        setTimeout('get_belum_kembali()', 100000);
     }
-
-
-
-
-
-
 
 
 
@@ -353,6 +358,8 @@
                 hii.innerHTML = data.message;
             }
         });
+
+        setTimeout('get_ct_sweing()', 100000);
     }
 
 
@@ -368,6 +375,8 @@
                 hii.innerHTML = data.message;
             }
         });
+
+        setTimeout('get_ct_qc()', 100000);
     }
 
     function get_ct_packing() {
@@ -382,6 +391,7 @@
                 hii.innerHTML = data.message;
             }
         });
+        setTimeout('get_ct_packing()', 100000);
     }
 
 
@@ -397,6 +407,7 @@
                 hii.innerHTML = data.message;
             }
         });
+        setTimeout('get_ct_cutting()', 100000);
     }
 
     function get_ct_mekanik() {
@@ -411,6 +422,8 @@
                 hii.innerHTML = data.message;
             }
         });
+
+        setTimeout('get_ct_mekanik()', 100000);
     }
 
     function get_ct_sample() {
@@ -425,6 +438,8 @@
                 hii.innerHTML = data.message;
             }
         });
+
+        setTimeout('get_ct_sample()', 100000);
     }
 
     function get_ct_wh() {
@@ -439,6 +454,8 @@
                 hii.innerHTML = data.message;
             }
         });
+
+        setTimeout('get_ct_wh()', 100000);
     }
 
     function get_ct_folding() {
@@ -453,6 +470,7 @@
                 hii.innerHTML = data.message;
             }
         });
+        setTimeout('get_ct_folding()', 100000);
     }
 
 
@@ -472,6 +490,7 @@
                 hii.innerHTML = data.message;
             }
         });
+        setTimeout('get_pinjam_hari_ini()', 100000);
     }
 
 
@@ -488,6 +507,7 @@
                 hii.innerHTML = data.message;
             }
         });
+        setTimeout('get_kembali_hari_ini()', 100000);
     }
 
 
@@ -500,10 +520,6 @@
 
         console.log(kemarin);
 
-        // var hasil = parseInt(kemarin) - parseInt(hari_ini);
-
-        // var hii = document.getElementById("put_kemarin");
-        // hii.innerHTML = hasil;
-        // $('#put_kemarin').val(hasil);
+     
     }
 </script>
