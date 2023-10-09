@@ -325,7 +325,7 @@
                 hii.innerHTML = data.message;
             }
         });
-        setTimeout('get_item_pinjam)', 100000);
+        setTimeout('get_item_pinjam()', 100000);
     }
 
     function get_belum_kembali() {

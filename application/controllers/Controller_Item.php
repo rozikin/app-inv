@@ -47,7 +47,6 @@ class Controller_Item extends CI_Controller
 		$this->load->view('template_oznet/footer');
 	}
 
-
 	public function get_data_index()
 	{
 		// Datatables Variables
@@ -388,6 +387,25 @@ class Controller_Item extends CI_Controller
 		$this->load->view('administrator/item/edit_item', $data);
 		$this->load->view('template_oznet/footer');
 	}
+
+
+	public function edit_item_adm($id)
+	{
+		$data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+		$data['title'] = 'Edit Item';
+		$data['items'] = $this->item->getID($id);
+		$data['supplier'] = $this->item->get_supplier();
+		$data['unit'] = $this->item->get_unit();
+		$data['category'] = $this->item->get_category();
+
+		// $this->form_validation->set_rules('item_code', 'Item Code', 'required');
+
+		$this->load->view('template_oznet/header', $data);
+		$this->load->view('template_oznet/sidebar', $data);
+		$this->load->view('administrator/item/edit_item_adm', $data);
+		$this->load->view('template_oznet/footer');
+	}
+
 
 	public function update()
 	{

@@ -156,7 +156,7 @@ function add_data() {
 
 
 function edit_data(id) {
-    var a = "<?php echo site_url('Controller_Item/edit_item') ?>/" + id;
+    var a = "<?php echo site_url('Controller_Item/edit_item_adm') ?>/" + id;
     window.location.assign(a);
 }
 

@@ -69,7 +69,7 @@
                                     <div class="form-group">
                                         <label for="status">Status</label>
                                         <input type="text" class="form-control form-control-sm" name="status"
-                                            id="status" placeholder="status" value="<?= $items['status'] ?>" readonly>
+                                            id="status" placeholder="status" value="<?= $items['status'] ?>">
 
                                     </div>
 
