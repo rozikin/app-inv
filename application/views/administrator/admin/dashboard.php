@@ -16,7 +16,7 @@
     .table1,
     th,
     td {
-        padding: 1px 5px;
+        padding: 1px 2px;
         text-align: center;
     }
 
@@ -49,7 +49,7 @@
                             <p>Item</p>
                         </div>
                         <div class="icon">
-                            <i class="ion ion-stats-bars"></i>
+                            <i class="fa fa-list-alt"></i>
                         </div>
 
                     </div>
@@ -63,7 +63,7 @@
                             <p>Employee</p>
                         </div>
                         <div class="icon">
-                            <i class="ion ion-stats-bars"></i>
+                            <i class="fa fa-user"></i>
                         </div>
 
                     </div>
@@ -77,7 +77,7 @@
                                 <div id="put_peminjaman"></div>
                             </h3>
 
-                            <p>All Peminjaman</p>
+                            <p>All OUT Transc.</p>
 
                         </div>
                         <div class="icon">
@@ -93,7 +93,7 @@
 
                             <h3 id="put_item_pinjam"></h3>
 
-                            <p>Item Pinjam</p>
+                            <p>Item OUT</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-stats-bars"></i>
@@ -122,9 +122,10 @@
                                     <th>SPL</th>
                                     <th>WH</th>
                                     <th>FOLD</th>
-                                    <th>PINJAM_NOW</th>
+                                    <th>OTHER</th>
+                                    <th>OUT_NOW</th>
                                     <th>REUTRN_NOW</th>
-                                    <th>KMRN_BLM_KBLI</th>
+                                    <th>NOT_RETURN</th>
 
                                 </tr>
                                 <tr>
@@ -136,6 +137,7 @@
                                     <td id="put_sample"></td>
                                     <td id="put_wh"></td>
                                     <td id="put_folding"></td>
+                                    <td id="put_other"></td>
                                     <td id="put_pinjam_hari_ini"></td>
                                     <td id="put_kembali_hari_ini"></td>
                                     <td id="put_kemarin"></td>
@@ -227,6 +229,8 @@
         get_ct_sample();
         get_ct_wh();
         get_ct_folding();
+        get_ct_other();
+
         get_ct_qc();
         get_pinjam_hari_ini();
         get_kembali_hari_ini();
@@ -471,6 +475,21 @@
             }
         });
         setTimeout('get_ct_folding()', 100000);
+    }
+
+    function get_ct_other() {
+
+        $.ajax({
+            url: "<?php echo site_url('Admin/get_ct_other') ?>/",
+            type: "POST",
+            success: function(result) {
+                var data = $.parseJSON(result);
+
+                var hii = document.getElementById("put_other");
+                hii.innerHTML = data.message;
+            }
+        });
+        setTimeout('get_ct_other()', 100000);
     }
 
 

@@ -269,6 +269,30 @@ class Admin extends CI_Controller
 		echo json_encode(array("message" => $message));
 	}
 
+	function get_ct_other()
+	{
+
+
+		date_default_timezone_set('Asia/Jakarta');
+
+		$this->db->like('dates', date('Y-m-d'));
+		$this->db->like('remark', 'PINJAM');
+		$this->db->not_like('item_code', 'FOLD');
+		$this->db->not_like('item_code', 'SEW');
+		$this->db->not_like('item_code', 'WH');
+		$this->db->not_like('item_code', 'CUT');
+		$this->db->not_like('item_code', 'QC');
+		$this->db->not_like('item_code', 'PACK');
+		$this->db->not_like('item_code', 'MEK');
+		$this->db->not_like('item_code', 'SPL');
+		$this->db->not_like('item_code', 'FAB');
+		$data = $this->db->get('tb_pinjam')->num_rows();
+
+		$message = '<h6>' . $data . '</h6>';
+
+		echo json_encode(array("message" => $message));
+	}
+
 
 
 
