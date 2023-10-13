@@ -122,9 +122,11 @@
                                     <th>SPL</th>
                                     <th>WH</th>
                                     <th>FOLD</th>
+                                    <th>PRNT</th>
+                                    <th>IRON</th>
                                     <th>OTHER</th>
                                     <th>OUT_NOW</th>
-                                    <th>REUTRN_NOW</th>
+                                    <th>RETURN_NOW</th>
                                     <th>NOT_RETURN</th>
 
                                 </tr>
@@ -137,6 +139,8 @@
                                     <td id="put_sample"></td>
                                     <td id="put_wh"></td>
                                     <td id="put_folding"></td>
+                                    <td id="put_print"></td>
+                                    <td id="put_iron"></td>
                                     <td id="put_other"></td>
                                     <td id="put_pinjam_hari_ini"></td>
                                     <td id="put_kembali_hari_ini"></td>
@@ -173,7 +177,7 @@
                                 <!-- <th>DEPT.</th> -->
                                 <!-- <th>LINE.</th> -->
                                 <th>ITEM CODE.</th>
-                                <!-- <th>DESC</th> -->
+                                <th>DESC</th>
                                 <th>STATUS</th>
                             </tr>
                         </thead>
@@ -211,11 +215,11 @@
 
 
     $(document).ready(function() {
-       
+
 
 
         get_data_trans()
-      
+
         get_item();
         get_employee();
 
@@ -229,6 +233,8 @@
         get_ct_sample();
         get_ct_wh();
         get_ct_folding();
+        get_ct_print();
+        get_ct_iron();
         get_ct_other();
 
         get_ct_qc();
@@ -251,7 +257,7 @@
 
     }
 
-    function get_data_trans(){
+    function get_data_trans() {
         table = $('#example6').DataTable({
             "responsive": true,
             "autoWidth": false,
@@ -477,6 +483,36 @@
         setTimeout('get_ct_folding()', 100000);
     }
 
+
+    function get_ct_print() {
+
+        $.ajax({
+            url: "<?php echo site_url('Admin/get_ct_print') ?>/",
+            type: "POST",
+            success: function(result) {
+                var data = $.parseJSON(result);
+
+                var hii = document.getElementById("put_print");
+                hii.innerHTML = data.message;
+            }
+        });
+        setTimeout('get_ct_print()', 100000);
+    }
+    function get_ct_iron() {
+
+        $.ajax({
+            url: "<?php echo site_url('Admin/get_ct_iron') ?>/",
+            type: "POST",
+            success: function(result) {
+                var data = $.parseJSON(result);
+
+                var hii = document.getElementById("put_iron");
+                hii.innerHTML = data.message;
+            }
+        });
+        setTimeout('get_ct_iron()', 100000);
+    }
+
     function get_ct_other() {
 
         $.ajax({
@@ -539,6 +575,6 @@
 
         console.log(kemarin);
 
-     
+
     }
 </script>

@@ -225,7 +225,6 @@ class Admin extends CI_Controller
 	function get_ct_sample()
 	{
 
-
 		date_default_timezone_set('Asia/Jakarta');
 
 		$this->db->like('dates', date('Y-m-d'));
@@ -269,6 +268,38 @@ class Admin extends CI_Controller
 		echo json_encode(array("message" => $message));
 	}
 
+	function get_ct_print()
+	{
+
+
+		date_default_timezone_set('Asia/Jakarta');
+
+		$this->db->like('dates', date('Y-m-d'));
+		$this->db->like('remark', 'PINJAM');
+		$this->db->like('item_code', 'PRINT');
+		$data = $this->db->get('tb_pinjam')->num_rows();
+
+		$message = '<h6>' . $data . '</h6>';
+
+		echo json_encode(array("message" => $message));
+	}
+
+	function get_ct_iron()
+	{
+
+
+		date_default_timezone_set('Asia/Jakarta');
+
+		$this->db->like('dates', date('Y-m-d'));
+		$this->db->like('remark', 'PINJAM');
+		$this->db->like('item_code', 'IRON');
+		$data = $this->db->get('tb_pinjam')->num_rows();
+
+		$message = '<h6>' . $data . '</h6>';
+
+		echo json_encode(array("message" => $message));
+	}
+
 	function get_ct_other()
 	{
 
@@ -286,6 +317,8 @@ class Admin extends CI_Controller
 		$this->db->not_like('item_code', 'MEK');
 		$this->db->not_like('item_code', 'SPL');
 		$this->db->not_like('item_code', 'FAB');
+		$this->db->not_like('item_code', 'PRINT');
+		$this->db->not_like('item_code', 'IRON');
 		$data = $this->db->get('tb_pinjam')->num_rows();
 
 		$message = '<h6>' . $data . '</h6>';
@@ -414,16 +447,16 @@ class Admin extends CI_Controller
 
 		foreach ($query->result() as $r) {
 
-			
-            $this->db->where('employee_id', $r->employee_id);
-            $xx = $this->db->get('tb_employee');
-            $this->db->where('item_code', $r->item_code);
-            $s = $this->db->get('tb_items');
 
-            $row_item_desc = '';
-            $row_name = '';
-            $row_department = '';
-            $row_line = '';
+			$this->db->where('employee_id', $r->employee_id);
+			$xx = $this->db->get('tb_employee');
+			$this->db->where('item_code', $r->item_code);
+			$s = $this->db->get('tb_items');
+
+			$row_item_desc = '';
+			$row_name = '';
+			$row_department = '';
+			$row_line = '';
 
 
 
@@ -442,21 +475,20 @@ class Admin extends CI_Controller
 			$row[] = $r->date_ret;
 			$row[] = $r->employee_id;
 			foreach ($xx->result() as $key) {
-                $row_name .= $key->employee_name;
-                $row_department .= $key->department;
-            
-            };
+				$row_name .= $key->employee_name;
+				$row_department .= $key->department;
+			};
 
 			$row[] = $row_name;
-            // $row[] = $row_department;
+			// $row[] = $row_department;
 
 
 			$row[] = $r->item_code;
 			foreach ($s->result() as $key) {
-                $row_item_desc .= $key->item_description;
-            };
+				$row_item_desc .= $key->item_description;
+			};
 
-			// $row[] = $row_item_desc;
+			$row[] = $row_item_desc;
 
 			$row[] = $r->remark == 'PINJAM' ? '<a class="badge badge-danger">' . $r->remark . '</a>' : '<a class="badge badge-success">' . $r->remark . '</a>';
 			$data[] = $row;
