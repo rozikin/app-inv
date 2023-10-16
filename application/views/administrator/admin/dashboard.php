@@ -289,7 +289,7 @@
                 hii.innerHTML = data.message;
             }
         });
-        setTimeout('get_employee()', 100000);
+        setTimeout('get_employee()', 1000000);
     }
 
     function get_item() {
@@ -304,7 +304,7 @@
                 hii.innerHTML = data.message;
             }
         });
-        setTimeout('get_item()', 100000);
+        setTimeout('get_item()', 1000000);
     }
 
 
@@ -320,7 +320,7 @@
                 hii.innerHTML = data.message;
             }
         });
-        setTimeout('get_peminjaman()', 100000);
+        setTimeout('get_peminjaman()', 1000000);
     }
 
     function get_item_pinjam() {
@@ -335,7 +335,7 @@
                 hii.innerHTML = data.message;
             }
         });
-        setTimeout('get_item_pinjam()', 100000);
+        setTimeout('get_item_pinjam()', 1000000);
     }
 
     function get_belum_kembali() {
@@ -350,7 +350,7 @@
                 hii.innerHTML = data.message;
             }
         });
-        setTimeout('get_belum_kembali()', 100000);
+        setTimeout('get_belum_kembali()', 1000000);
     }
 
 
@@ -369,7 +369,7 @@
             }
         });
 
-        setTimeout('get_ct_sweing()', 100000);
+        setTimeout('get_ct_sweing()', 1000000);
     }
 
 
@@ -386,7 +386,7 @@
             }
         });
 
-        setTimeout('get_ct_qc()', 100000);
+        setTimeout('get_ct_qc()', 1000000);
     }
 
     function get_ct_packing() {
@@ -401,7 +401,7 @@
                 hii.innerHTML = data.message;
             }
         });
-        setTimeout('get_ct_packing()', 100000);
+        setTimeout('get_ct_packing()', 1000000);
     }
 
 
@@ -417,7 +417,7 @@
                 hii.innerHTML = data.message;
             }
         });
-        setTimeout('get_ct_cutting()', 100000);
+        setTimeout('get_ct_cutting()', 1000000);
     }
 
     function get_ct_mekanik() {
@@ -433,7 +433,7 @@
             }
         });
 
-        setTimeout('get_ct_mekanik()', 100000);
+        setTimeout('get_ct_mekanik()', 1000000);
     }
 
     function get_ct_sample() {
@@ -449,7 +449,7 @@
             }
         });
 
-        setTimeout('get_ct_sample()', 100000);
+        setTimeout('get_ct_sample()', 1000000);
     }
 
     function get_ct_wh() {
@@ -465,7 +465,7 @@
             }
         });
 
-        setTimeout('get_ct_wh()', 100000);
+        setTimeout('get_ct_wh()', 1000000);
     }
 
     function get_ct_folding() {
@@ -480,7 +480,7 @@
                 hii.innerHTML = data.message;
             }
         });
-        setTimeout('get_ct_folding()', 100000);
+        setTimeout('get_ct_folding()', 1000000);
     }
 
 
@@ -496,7 +496,7 @@
                 hii.innerHTML = data.message;
             }
         });
-        setTimeout('get_ct_print()', 100000);
+        setTimeout('get_ct_print()', 1000000);
     }
     function get_ct_iron() {
 
@@ -510,7 +510,7 @@
                 hii.innerHTML = data.message;
             }
         });
-        setTimeout('get_ct_iron()', 100000);
+        setTimeout('get_ct_iron()', 1000000);
     }
 
     function get_ct_other() {
@@ -525,7 +525,7 @@
                 hii.innerHTML = data.message;
             }
         });
-        setTimeout('get_ct_other()', 100000);
+        setTimeout('get_ct_other()', 1000000);
     }
 
 
@@ -545,7 +545,7 @@
                 hii.innerHTML = data.message;
             }
         });
-        setTimeout('get_pinjam_hari_ini()', 100000);
+        setTimeout('get_pinjam_hari_ini()', 1000000);
     }
 
 
@@ -562,7 +562,7 @@
                 hii.innerHTML = data.message;
             }
         });
-        setTimeout('get_kembali_hari_ini()', 100000);
+        setTimeout('get_kembali_hari_ini()', 1000000);
     }
 
 

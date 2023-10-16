@@ -95,7 +95,7 @@
                                         <th>EMP ID</th>
                                         <th>NAME</th>
                                         <th>DEPT.</th>
-                                        <th>LINE.</th>
+                                        <th>POSISI</th>
                                         <th>ITEM CODE.</th>
                                         <th>Desc.</th>
                                         <th>STATUS</th>

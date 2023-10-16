@@ -105,7 +105,7 @@
                                 <th>NIK</th>
                                 <th>Name</th>
                                 <th>Department</th>
-                                <th>Line</th>
+                                <th>POSISI</th>
                                 <th>Item Code</th>
                                 <th>Desc</th>
                                 <th scope="col">Action</th>
