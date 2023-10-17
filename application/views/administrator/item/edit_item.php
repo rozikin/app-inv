@@ -84,7 +84,7 @@
                                                 readonly>
                                             <input type="text" class="form-control form-control-sm rounded-0"
                                                 name="name_category" id="name_category"
-                                                value="<?= $items['name_category'] ?>" readonly>
+                                                value="<?= $items['name_category'] ?>" readonly required>
                                             <span class="input-group-append">
                                                 <button class="btn btn-secondary btn-sm" type="button"
                                                     onclick="cari_category()">
@@ -101,7 +101,7 @@
                                             <input type="hidden" class="form-control form-control-sm rounded-0"
                                                 name="id_unit" id="id_unit" value="<?= $items['id_unit'] ?>" readonly>
                                             <input type="text" class="form-control form-control-sm rounded-0"
-                                                name="code_unit" id="code_unit" value="<?= $items['unit'] ?>" readonly>
+                                                name="code_unit" id="code_unit" value="<?= $items['unit'] ?>" readonly required>
                                             <span class="input-group-append">
                                                 <button class="btn btn-secondary btn-sm" type="button"
                                                     onclick="cari_unit()">
