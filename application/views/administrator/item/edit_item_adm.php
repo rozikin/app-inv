@@ -60,7 +60,7 @@
                                     <!-- /.form-group -->
 
                                     <div class="form-group">
-                                        <label for="linex">Line</label>
+                                        <label for="linex">POSISI</label>
                                         <input type="text" class="form-control form-control-sm" name="linex" id="linex"
                                             placeholder="line" value="<?= $items['linex'] ?>">
 

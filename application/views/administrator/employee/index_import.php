@@ -74,7 +74,7 @@
                                         <th scope="col">Employee ID</th>
                                         <th scope="col">Name</th>
                                         <th scope="col">deprtment</th>
-                                        <th scope="col">line</th>
+                                        <th scope="col">POSISI</th>
                                         <th scope="col">Barcode</th>
 
                                         <th scope="col">Action</th>

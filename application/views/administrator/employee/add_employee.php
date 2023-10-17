@@ -50,7 +50,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="line">LINE</label>
+                                        <label for="line">POSISI</label>
                                         <input type="text" class="form-control form-control-sm" name="line" id="line" placeholder="description" required>
                                     </div>
 

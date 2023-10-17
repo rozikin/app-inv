@@ -42,7 +42,7 @@
                                         <th>EMP ID</th>
                                         <th>EMP NAME</th>
                                         <th>DEPT</th>
-                                        <th>LINE</th>
+                                        <th>POSISI</th>
                                     </tr>
                                 </thead>
 

@@ -75,7 +75,7 @@
                                         <th scope="col">Description</th>
                                         <th scope="col">Category</th>
                                         <th scope="col">Unit</th>
-                                        <th scope="col">Line</th>
+                                        <th scope="col">POSISI</th>
                                         <th scope="col">qrcode</th>
                                         <th scope="col">Action</th>
 

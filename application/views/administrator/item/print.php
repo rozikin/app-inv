@@ -38,7 +38,7 @@
 
                                     <div class="form-group">
                                         <!-- /input-group -->
-                                        <label for="id_category">LINE</label>
+                                        <label for="id_category">POSISI</label>
                                         <div class="input-group mb-3">
 
                                             <input type="text" class="form-control form-control-sm rounded-0" name="linex" id="linex" required>
