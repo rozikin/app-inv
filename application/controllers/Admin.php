@@ -39,8 +39,14 @@ class Admin extends CI_Controller
 	function get_data_employee()
 	{
 
-		$this->db->where('id >', 0);
-		$data = $this->db->get('tb_employee')->num_rows();
+		$x = $this->db->query('SELECT DISTINCT employee_id FROM  tb_pinjam where remark = "PINJAM" ');
+		// $this->db->where('remark', 'PINJAM');
+		
+
+		$data = $x->num_rows();
+
+		// $this->db->where('id >', 0);
+		// $data = $this->db->get('tb_employee')->num_rows();
 
 		$message = $data;
 
@@ -438,7 +444,7 @@ class Admin extends CI_Controller
 
 		$draw = intval($this->input->get("draw"));
 
-		$this->db->like('dates', date('Y-m-d'));
+		$this->db->like('dates', date('Y-m-d', strtotime("-1 day", strtotime(date("Y-m-d")))));
 		$this->db->where('remark', 'PINJAM');
 		$this->db->order_by("id_out", "desc");
 		$query = $this->db->get("tb_pinjam");

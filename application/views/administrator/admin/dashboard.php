@@ -60,7 +60,7 @@
                     <div class="small-box bg-success">
                         <div class="inner">
                             <h3 id="put_employee"></h3>
-                            <p>Employee</p>
+                            <p>Employee (Borrow)</p>
                         </div>
                         <div class="icon">
                             <i class="fa fa-user"></i>
@@ -163,7 +163,7 @@
 
 
 
-
+                    <h6>Data not return</h6>
                     <table id="example6" class="table table-hover table-bordered table-sm" style="width:100%">
                         <thead>
                             <tr>
@@ -498,6 +498,7 @@
         });
         setTimeout('get_ct_print()', 1000000);
     }
+
     function get_ct_iron() {
 
         $.ajax({
