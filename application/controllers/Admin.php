@@ -267,6 +267,7 @@ class Admin extends CI_Controller
 		$this->db->like('dates', date('Y-m-d'));
 		$this->db->like('remark', 'PINJAM');
 		$this->db->like('item_code', 'FOLD');
+		// $this->db->or_like('item_code', 'TRNS');
 		$data = $this->db->get('tb_pinjam')->num_rows();
 
 		$message = '<h6>' . $data . '</h6>';
@@ -315,6 +316,7 @@ class Admin extends CI_Controller
 		$this->db->like('dates', date('Y-m-d'));
 		$this->db->like('remark', 'PINJAM');
 		$this->db->not_like('item_code', 'FOLD');
+		// $this->db->not_like('item_code', 'TRNS');
 		$this->db->not_like('item_code', 'SEW');
 		$this->db->not_like('item_code', 'WH');
 		$this->db->not_like('item_code', 'CUT');

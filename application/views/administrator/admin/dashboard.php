@@ -112,7 +112,8 @@
                     <div class="row mb-3">
                         <div class="col-12">
                             <h6>Peminjaman Hari ini</h6>
-                            <table class="table1 table">
+                            <div style="overflow-x:auto;">
+                            <table class="table table1">
                                 <tr>
                                     <th>SEW</th>
                                     <th>QC</th>
@@ -150,6 +151,7 @@
 
 
                             </table>
+                            </div>
 
 
 
