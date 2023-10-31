@@ -110,18 +110,19 @@ class Admin extends CI_Controller
 	{
 
 		$this->db->where('remark', 'PINJAM');
+		$this->db->like('dates', date('Y-m-d', strtotime("-1 day", strtotime(date("Y-m-d")))));
 		$all_data_pinjam = $this->db->get('tb_pinjam')->num_rows();
 
 
 
 
-		$this->db->like('dates', date('Y-m-d'));
-		$this->db->where('remark', 'PINJAM');
-		$data_pinjam_hari_ini = $this->db->get('tb_pinjam')->num_rows();
+		// $this->db->like('dates', date('Y-m-d'));
+		// $this->db->where('remark', 'PINJAM');
+		// $data_pinjam_hari_ini = $this->db->get('tb_pinjam')->num_rows();
 
-		$hasil = $all_data_pinjam - $data_pinjam_hari_ini;
+		// $hasil = $all_data_pinjam - $data_pinjam_hari_ini;
 
-		$message = '<h6 class="text-danger">' . $hasil . '</h6>';
+		$message = '<h6 class="text-danger">' . $all_data_pinjam . '</h6>';
 
 		echo json_encode(array("message" => $message));
 	}
