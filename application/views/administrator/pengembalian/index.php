@@ -15,32 +15,31 @@
 
         <div class="row  bg-dark">
             <div class="col-12">
-                <div class="row">
-                    <div class="col-1 text-center">
+
+                <div class="row text-center">
+                    <div class="col-md-12 text-center">
+                        <h5>PENGEMBALIAN</h5>
                         <h5 id="jam"></h5>
-
                     </div>
-                    <div class="col-11 text-center">
-                        <h5 class="text-bold">PENGEMBALIAN</h5>
-
-                    </div>
-
-
                 </div>
+
 
                 <div class="card bg-dark">
                     <div class="card-body">
 
                         <form id="form-user">
-                            <div class="row invoice-info mt-1">
+                            <div class="row invoice-info">
                                 <div class="container">
                                     <div class="row">
                                         <div class="col-sm-12">
-                                            <div class="form-group row mb-1">
+                                            <div class="form-group row">
 
-                                                <label for="employee_id" class="col-sm-1 col-form-label">NIK</label>
-                                                <div class="col-4">
-                                                    <input type="text" class="form-control form-control-sm" id="employee_id" name="employee_id" required autofocus>
+                                                <div class="from-group col-md-6">
+
+
+                                                    <label for="employee_id">NIK</label>
+
+                                                    <input type="number" class="form-control form-control-sm" id="employee_id" name="employee_id" required autofocus>
                                                     <div class="box-login">
                                                         <input type="text" class="form-control form-control-sm" id="employee_name" name="employee_name">
                                                     </div>
@@ -48,8 +47,11 @@
                                                 </div>
 
 
-                                                <label for="item_code" class="col-sm-1 col-form-label">ITEM</label>
-                                                <div class="col-sm-4">
+                                                <div class="form-group col-md-6">
+
+
+                                                    <label for="item_code">ITEM</label>
+
                                                     <input type="text" class="form-control form-control-sm" id="item_code" name="item_code" required>
                                                     <div class="box-login">
                                                         <input type="text" class="form-control form-control-sm " id="item_description" name="item_description">
@@ -62,6 +64,7 @@
                                                         <input type="text" class="form-control form-control-sm" id="no_pinjam" name="no_pinjam" required>
 
                                                     </div>
+
 
                                                 </div>
 
@@ -462,7 +465,7 @@
                         var dataResult = JSON.parse(dataResult);
                         if (dataResult.statusCode == 200) {
 
-                           
+
                             toastr.success(
                                 'data berhasil disimpan!'
                             );
@@ -476,7 +479,7 @@
                         } else if (dataResult.statusCode == 201) {
                             toastr.error('Tidak ditemukan transaksi ini');
                             bersihkan_input();
-                          
+
                         }
                     }
                 });

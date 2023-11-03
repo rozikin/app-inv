@@ -342,7 +342,7 @@ class Controller_Item extends CI_Controller
 			$this->db->where('item_code', $kode);
 			$num = $this->db->get('tb_items')->num_rows();
 
-			if ($num == 0) {
+			if ($num == 0 && $kode == !null) {
 				echo  $this->item->insert($data);
 				// echo $this->trims->save_detil($data2);
 
@@ -355,7 +355,7 @@ class Controller_Item extends CI_Controller
 			} else {
 
 				$message = array(
-					'message' => '<div class="alert alert-danger">Import file excel gagal data duplikat</div>',
+					'message' => '<div class="alert alert-danger">Import file excel gagal data duplikat / ada row kosong!</div>',
 				);
 
 				$this->session->set_flashdata($message);

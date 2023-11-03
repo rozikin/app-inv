@@ -35,7 +35,13 @@
 
         <div class="row">
             <div class="container">
-                <h3 class="text-center" id="jam"></h3>
+                <h3 class="text-center mb-0" id="jam"></h3>
+                <h4 class="text-center">
+                    <?php
+                    date_default_timezone_set('Asia/Jakarta');
+                    echo date('d F Y')
+                    ?>
+                </h4>
 
             </div>
         </div>
@@ -113,44 +119,44 @@
                         <div class="col-12">
                             <h6>Peminjaman Hari ini</h6>
                             <div style="overflow-x:auto;">
-                            <table class="table table1">
-                                <tr>
-                                    <th>SEW</th>
-                                    <th>QC</th>
-                                    <th>PACK</th>
-                                    <th>CUTT</th>
-                                    <th>MKN</th>
-                                    <th>SPL</th>
-                                    <th>WH</th>
-                                    <th>FOLD</th>
-                                    <th>PRNT</th>
-                                    <th>IRON</th>
-                                    <th>OTHER</th>
-                                    <th>OUT_NOW</th>
-                                    <th>RETURN_NOW</th>
-                                    <th>NOT_RETURN</th>
+                                <table class="table table1">
+                                    <tr>
+                                        <th>SEW</th>
+                                        <th>QC</th>
+                                        <th>PACK</th>
+                                        <th>CUTT</th>
+                                        <th>MKN</th>
+                                        <th>SPL</th>
+                                        <th>WH</th>
+                                        <th>FOLD</th>
+                                        <th>PRNT</th>
+                                        <th>IRON</th>
+                                        <th>OTHER</th>
+                                        <th>OUT_NOW</th>
+                                        <th>RETURN_NOW</th>
+                                        <th>NOT_RETURN</th>
 
-                                </tr>
-                                <tr>
-                                    <td id="put_sewing"></td>
-                                    <td id="put_qc"></td>
-                                    <td id="put_packing"></td>
-                                    <td id="put_cutting"></td>
-                                    <td id="put_mekanik"></td>
-                                    <td id="put_sample"></td>
-                                    <td id="put_wh"></td>
-                                    <td id="put_folding"></td>
-                                    <td id="put_print"></td>
-                                    <td id="put_iron"></td>
-                                    <td id="put_other"></td>
-                                    <td id="put_pinjam_hari_ini"></td>
-                                    <td id="put_kembali_hari_ini"></td>
-                                    <td id="put_kemarin"></td>
+                                    </tr>
+                                    <tr>
+                                        <td id="put_sewing"></td>
+                                        <td id="put_qc"></td>
+                                        <td id="put_packing"></td>
+                                        <td id="put_cutting"></td>
+                                        <td id="put_mekanik"></td>
+                                        <td id="put_sample"></td>
+                                        <td id="put_wh"></td>
+                                        <td id="put_folding"></td>
+                                        <td id="put_print"></td>
+                                        <td id="put_iron"></td>
+                                        <td id="put_other"></td>
+                                        <td id="put_pinjam_hari_ini"></td>
+                                        <td id="put_kembali_hari_ini"></td>
+                                        <td id="put_kemarin"></td>
 
-                                </tr>
+                                    </tr>
 
 
-                            </table>
+                                </table>
                             </div>
 
 
@@ -195,6 +201,7 @@
 <script>
     window.onload = function() {
         jam();
+        // tanggal();
     }
 
     function jam() {
@@ -213,6 +220,10 @@
     function set(e) {
         e = e < 10 ? '0' + e : e;
         return e;
+    }
+
+    function tanggal() {
+        document.getElementById("tgl").innerHTML = Date('YYYY-mm-dd');
     }
 
 

@@ -64,7 +64,7 @@
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
             <a href="" class="brand-link">
-                <i class="fas fa-tshirt ml-4 mr-3"></i>
+                <i class="fa fa-exclamation-triangle ml-4 mr-3"></i>
                 <span class="brand-text font-weight-light">APP - PINJAM BARANG</span>
             </a>
 

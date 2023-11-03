@@ -24,6 +24,24 @@ class Controller_Peminjaman extends CI_Controller
         $this->load->view('template_oznet/footer');
     }
 
+
+    
+    public function monitor_peminjaman()
+    {
+        $data['title'] = 'Monitor Peminjaman';
+
+        $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+        // $data['pinjam'] = $this->peminjaman->get_out();
+
+        $this->load->view('template_oznet/header', $data);
+        // $this->load->view('template_oznet/sidebar', $data);
+        $this->load->view('administrator/peminjaman/monitor_peminjaman');
+        $this->load->view('template_oznet/footer');
+    }
+
+
+
+
     public function hapus_out($id)
     {
         $this->peminjaman->hapusDataOut($id);
@@ -128,6 +146,72 @@ class Controller_Peminjaman extends CI_Controller
         $this->db->like('dates', date('Y-m-d'));
         // $this->db->where('dates <', date('Y-m-d 24:00:00'));
         // $this->db->where('remark', 'PINJAM');
+        $this->db->order_by("no_out", "desc");
+        $query = $this->db->get("tb_pinjam");
+        $data = [];
+        $no = 0;
+
+
+        foreach ($query->result() as $r) {
+            $this->db->where('employee_id', $r->employee_id);
+            $xx = $this->db->get('tb_employee');
+            $this->db->where('item_code', $r->item_code);
+            $s = $this->db->get('tb_items');
+
+            $row_item_desc = '';
+            $row_name = '';
+            $row_department = '';
+            $row_line = '';
+            $no++;
+
+            $row = array();
+            $row[] = $no;
+            $row[] = $r->no_out;
+            $row[] = $r->dates;
+            $row[] = $r->employee_id;
+            foreach ($xx->result() as $key) {
+                $row_name .= $key->employee_name;
+                $row_department .= $key->department;
+                $row_line .= $key->linex;
+            };
+
+            $row[] = $row_name;
+            $row[] = $row_department;
+            $row[] = $row_line;
+            $row[] = $r->item_code;
+            foreach ($s->result() as $key) {
+                $row_item_desc .= $key->item_description;
+            };
+
+            $row[] = $row_item_desc;
+            $row[] = $r->remark == 'PINJAM' ? '<a class="badge badge-danger">' . $r->remark . '</a>' : '<a class="badge badge-success">' . $r->remark . '</a>';
+
+
+
+            $data[] = $row;
+        };
+
+        $result = array(
+            "draw" => $draw,
+            "recordsTotal" => $query->num_rows(),
+            "recordsFiltered" => $query->num_rows(),
+            "data" => $data
+        );
+
+        echo json_encode($result);
+        exit();
+    }
+
+
+    
+    public function get_data_monitor_peminjaman()
+    {
+        date_default_timezone_set('Asia/Jakarta');
+
+        $draw = intval($this->input->get("draw"));
+
+    
+        $this->db->where('remark', 'PINJAM');
         $this->db->order_by("no_out", "desc");
         $query = $this->db->get("tb_pinjam");
         $data = [];
