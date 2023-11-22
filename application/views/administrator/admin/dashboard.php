@@ -258,6 +258,10 @@
         get_belum_kembali();
 
 
+        get_telegram();
+
+
+
 
 
 
@@ -266,9 +270,50 @@
     function get_ct_pinjam() {
 
         var a = $("#put_peminjaman").text;
-        console.log(a);
+      
 
     }
+
+    function get_telegram() {
+
+        var cek_data = $('#put_employee').text();
+        var cek_int = Number(cek_data);
+       
+
+        var cek_jam = '18:32:10';
+        var cek_jam2 = '5:50:10';
+        var today = new Date();
+        var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+        var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+        var dateTime = time; 
+
+        // console.log(dateTime)
+
+      
+
+        if (dateTime == cek_jam) {
+            $.ajax({
+                url: '<?php echo site_url('Admin/get_update') ?>',
+                type: 'POST'
+            })
+
+        }
+
+        if (dateTime == cek_jam2) {
+            $.ajax({
+                url: '<?php echo site_url('Admin/get_update2') ?>',
+                type: 'POST'
+            })
+
+        }
+    
+
+
+        setTimeout('get_telegram()', 1000);
+
+
+    }
+
 
     function get_data_trans() {
         table = $('#example6').DataTable({

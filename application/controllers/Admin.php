@@ -108,6 +108,9 @@ class Admin extends CI_Controller
 
 	function get_data_belum_kembali()
 	{
+        
+		date_default_timezone_set('Asia/Jakarta');
+
 
 		$this->db->where('remark', 'PINJAM');
 		$this->db->like('dates', date('Y-m-d', strtotime("-1 day", strtotime(date("Y-m-d")))));
@@ -186,8 +189,8 @@ class Admin extends CI_Controller
 	function get_ct_packing()
 	{
 
-
 		date_default_timezone_set('Asia/Jakarta');
+
 
 		$this->db->like('dates', date('Y-m-d'));
 		$this->db->like('remark', 'PINJAM');
@@ -439,6 +442,67 @@ class Admin extends CI_Controller
 	{
 		redirect('client');
 	}
+
+
+
+	public function get_update() {
+				    
+		$token  = '6648766898:AAGpG9x6PEQBa94j_sX7xWmCutzAFeZWHJc';
+		$link   = 'https://api.telegram.org:443/bot'.$token.'';
+	    
+		$update = file_get_contents($link.'/getUpdates');
+		$response = json_decode($update, TRUE);
+	    
+	    $chat_id = $response['result'][0]['message']['chat']['id'];
+
+		date_default_timezone_set('Asia/Jakarta');
+
+		$this->db->like('dates', date('Y-m-d'));
+		$this->db->where('remark', 'PINJAM');
+		$all_data_pinjam = $this->db->get('tb_pinjam')->num_rows();
+
+		$introx = "DT yang belum kembali = ";
+
+	    $message = $introx.strval($all_data_pinjam);
+	    $parameters = [
+	    	'chat_id' => -4011102779, 
+	    	'text'  => $message,
+	    ];
+	    
+	    $url = $link.'/sendMessage?'.http_build_query($parameters); 
+	    file_get_contents($url);
+	    
+	}
+
+	public function get_update2() {
+				    
+		$token  = '6648766898:AAGpG9x6PEQBa94j_sX7xWmCutzAFeZWHJc';
+		$link   = 'https://api.telegram.org:443/bot'.$token.'';
+	    
+		$update = file_get_contents($link.'/getUpdates');
+		$response = json_decode($update, TRUE);
+	    
+	    $chat_id = $response['result'][0]['message']['chat']['id'];
+
+		$this->db->where('remark', 'PINJAM');
+		$this->db->like('dates', date('Y-m-d', strtotime("-1 day", strtotime(date("Y-m-d")))));
+		$all_data_pinjam = $this->db->get('tb_pinjam')->num_rows();
+		$introx = "DT yang belum kembali = ";
+
+	    $message = $introx.strval($all_data_pinjam);
+	    $parameters = [
+	    	'chat_id' => -4011102779, 
+	    	'text'  => $message,
+	    ];
+	    
+	    $url = $link.'/sendMessage?'.http_build_query($parameters); 
+	    file_get_contents($url);
+	    
+	}
+
+
+
+
 
 	public function get_data_transaksi()
 	{
