@@ -59,7 +59,7 @@
                                             <input type="hidden" class="form-control form-control-sm rounded-0"
                                                 name="id_category" id="id_category" id="id_category" readonly>
                                             <input type="text" class="form-control form-control-sm rounded-0"
-                                                name="name_category" id="name_category" readonly>
+                                                name="name_category" id="name_category" onclick="cari_category()" required>
                                             <span class="input-group-append">
                                                 <button class="btn btn-secondary btn-sm" type="button"
                                                     onclick="cari_category()">
@@ -76,7 +76,7 @@
                                             <input type="hidden" class="form-control form-control-sm rounded-0"
                                                 name="id_unit" id="id_unit" id="id_unit" readonly>
                                             <input type="text" class="form-control form-control-sm rounded-0"
-                                                name="code_unit" id="code_unit" readonly>
+                                                name="code_unit" id="code_unit" onclick="cari_unit()" required>
                                             <span class="input-group-append">
                                                 <button class="btn btn-secondary btn-sm" type="button"
                                                     onclick="cari_unit()">
