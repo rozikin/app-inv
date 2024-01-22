@@ -111,9 +111,16 @@ class Admin extends CI_Controller
         
 		date_default_timezone_set('Asia/Jakarta');
 
+		$tgl_sekarang = strtotime( date('Y-m-d'));
+
+		$tgl_kemarin = date('Y-m-d', strtotime("-1 day", $tgl_sekarang));
+
 
 		$this->db->where('remark', 'PINJAM');
-		$this->db->like('dates', date('Y-m-d', strtotime("-1 day", strtotime(date("Y-m-d")))));
+
+		// $this->db->like('dates', date('Y-m-d', strtotime("-1 day", strtotime(date("Y-m-d")))));
+		$this->db->where('dates <', $tgl_kemarin);
+
 		$all_data_pinjam = $this->db->get('tb_pinjam')->num_rows();
 
 
@@ -511,8 +518,18 @@ class Admin extends CI_Controller
 
 		$draw = intval($this->input->get("draw"));
 
-		$this->db->like('dates', date('Y-m-d', strtotime("-1 day", strtotime(date("Y-m-d")))));
-		$this->db->where('remark', 'PINJAM');
+		$tgl_sekarang = strtotime( date('Y-m-d'));
+
+		$tgl_kemarin = date('Y-m-d', strtotime("-1 day", $tgl_sekarang));
+
+
+		$this->db->where('remark', 'PINJAM'); 
+		$this->db->where('dates <', $tgl_kemarin);
+
+
+
+		// $this->db->like('dates', date('Y-m-d', strtotime("-1 day", strtotime(date("Y-m-d")))));
+		// $this->db->where('remark', 'PINJAM');
 		$this->db->order_by("id_out", "desc");
 		$query = $this->db->get("tb_pinjam");
 		$data = [];
