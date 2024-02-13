@@ -115,11 +115,21 @@ class Admin extends CI_Controller
 
 		$tgl_kemarin = date('Y-m-d', strtotime("-1 day", $tgl_sekarang));
 
+		// $from_trx = $this->input->post('from_transaksi');
+        // $to_trx = $this->input->post('to_transaksi');
+
+
+        // $this->db->where('dates >=', $from_trx);
+        // $this->db->where('dates <=', $to_trx);
+
+
+
 
 		$this->db->where('remark', 'PINJAM');
 
-		// $this->db->like('dates', date('Y-m-d', strtotime("-1 day", strtotime(date("Y-m-d")))));
-		$this->db->where('dates <', $tgl_kemarin);
+		// $this->db->where('dates >=', date('Y-m-d', strtotime("-1 day", strtotime(date("Y-m-d")))));
+		$this->db->where('dates >=', '2023-01-01');
+		$this->db->where('dates <=', $tgl_kemarin);
 
 		$all_data_pinjam = $this->db->get('tb_pinjam')->num_rows();
 
@@ -523,13 +533,17 @@ class Admin extends CI_Controller
 		$tgl_kemarin = date('Y-m-d', strtotime("-1 day", $tgl_sekarang));
 
 
-		$this->db->where('remark', 'PINJAM'); 
-		$this->db->where('dates <', $tgl_kemarin);
+		// $this->db->where('remark', 'PINJAM'); 
+		// $this->db->where('dates <', $tgl_kemarin);
+
+		$this->db->where('dates >=', '2023-01-01 00:00:00');
+		$this->db->where('dates <=', $tgl_kemarin);
+
 
 
 
 		// $this->db->like('dates', date('Y-m-d', strtotime("-1 day", strtotime(date("Y-m-d")))));
-		// $this->db->where('remark', 'PINJAM');
+		$this->db->where('remark', 'PINJAM');
 		$this->db->order_by("id_out", "desc");
 		$query = $this->db->get("tb_pinjam");
 		$data = [];
