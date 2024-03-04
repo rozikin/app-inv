@@ -127,9 +127,9 @@ class Admin extends CI_Controller
 
 		$this->db->where('remark', 'PINJAM');
 
-		// $this->db->where('dates >=', date('Y-m-d', strtotime("-1 day", strtotime(date("Y-m-d")))));
-		$this->db->where('dates >=', '2023-01-01');
-		$this->db->where('dates <=', $tgl_kemarin);
+		$this->db->like('dates', date('Y-m-d', strtotime("-1 day", strtotime(date("Y-m-d")))));
+		// $this->db->like('dates >=', '2023-01-01');
+		// $this->db->like('dates <=', $tgl_kemarin);
 
 		$all_data_pinjam = $this->db->get('tb_pinjam')->num_rows();
 
@@ -536,13 +536,13 @@ class Admin extends CI_Controller
 		// $this->db->where('remark', 'PINJAM'); 
 		// $this->db->where('dates <', $tgl_kemarin);
 
-		$this->db->where('dates >=', '2023-01-01 00:00:00');
-		$this->db->where('dates <=', $tgl_kemarin);
+		// $this->db->where('dates >=', '2023-01-01 00:00:00');
+		// $this->db->where('dates <=', $tgl_kemarin);
 
 
 
 
-		// $this->db->like('dates', date('Y-m-d', strtotime("-1 day", strtotime(date("Y-m-d")))));
+		$this->db->like('dates', date('Y-m-d', strtotime("-1 day", strtotime(date("Y-m-d")))));
 		$this->db->where('remark', 'PINJAM');
 		$this->db->order_by("id_out", "desc");
 		$query = $this->db->get("tb_pinjam");

@@ -54,11 +54,12 @@
 
                                                     <input type="text" class="form-control form-control-sm" id="item_code" name="item_code" required>
                                                     <div class="box-login">
-                                                        <input type="text" class="form-control form-control-sm " id="item_description" name="item_description">
-                                                    </div>
-                                                    <div class="box-login">
                                                         <input type="text" class="form-control form-control-sm " id="status" name="status">
                                                     </div>
+                                                    <div class="box-login">
+                                                        <input type="text" class="form-control form-control-sm " id="item_description" name="item_description">
+                                                    </div>
+
 
                                                 </div>
 
@@ -219,6 +220,85 @@
 
     });
 
+    function simpan_data() {
+        var pc = document.getElementById('employee_id');
+        var employee_id = $('#employee_id').val();
+        var item_code = $('#item_code').val();
+        var no_out = $('#no_out').val();
+        var status = $('#status').val();
+
+        if (status != "OUT" && employee_id != "" && item_code != "") {
+            // $("#simpan").attr("disabled", "disabled");
+            $.ajax({
+                url: "<?php echo base_url("Controller_Peminjaman/create_out_ajax"); ?>",
+                type: "POST",
+                data: {
+                    type: 1,
+                    // no_out: no_out,
+                    employee_id: employee_id,
+                    item_code: item_code
+                },
+                cache: false,
+                success: function(dataResult) {
+
+
+                    var dataResult = JSON.parse(dataResult);
+                    if (dataResult.statusCode == 200) {
+
+                        // kd_otomatis_no_out();
+
+                        toastr.success(
+                            'data berhasil disimpan!'
+                        );
+                        reload_table();
+                        pc.focus();
+
+
+                        $('#employee_id').val('');
+                        $('#employee_name').val('');
+                        $('#department').val('');
+                        $('#line').val('');
+                        $('#item_code').val('');
+                        $('#item_description').val('');
+                        $('#status').val('');
+
+
+
+
+
+                        $('#simpan').prop('disabled', true);
+
+                    } else if (dataResult.statusCode == 201) {
+                        alert("Error occured !");
+                    }
+                }
+
+            });
+
+        } else if (status === "OUT") {
+
+            toastr.error('Barang sudah dipinjam!');
+            $('#simpan').prop('disabled', true);
+
+
+            $('#employee_id').val('');
+            $('#employee_name').val('');
+            $('#department').val('');
+            $('#line').val('');
+            $('#item_code').val('');
+            $('#item_description').val('');
+            $('#status').val('');
+
+            pc.focus();
+
+        }
+    }
+
+    function simpanTime() {
+        timeout = setTimeout(simpan_data, 1000);
+    }
+
+
 
 
     $(document).ready(function() {
@@ -228,17 +308,13 @@
         $("#simpan").on('click', function(e) {
             e.preventDefault()
 
-
-
-
-
             var pc = document.getElementById('employee_id');
             var employee_id = $('#employee_id').val();
             var item_code = $('#item_code').val();
             var no_out = $('#no_out').val();
             var status = $('#status').val();
 
-            if (employee_id != "" && item_code != "" && status != "OUT") {
+            if (status != "OUT" && employee_id != "" && item_code != "") {
                 // $("#simpan").attr("disabled", "disabled");
                 $.ajax({
                     url: "<?php echo base_url("Controller_Peminjaman/create_out_ajax"); ?>",
@@ -283,6 +359,7 @@
                             alert("Error occured !");
                         }
                     }
+
                 });
 
             } else if (status === "OUT") {
@@ -301,16 +378,7 @@
 
                 pc.focus();
 
-
             }
-
-
-
-
-
-
-
-
         });
 
 
@@ -402,7 +470,8 @@
                         });
 
                         $('#simpan').prop('disabled', false);
-                        $('#simpan').click();
+                        // $('#simpan').click();
+                        simpanTime();
 
                     },
                     error: function() {
