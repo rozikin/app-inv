@@ -223,11 +223,13 @@
     function simpan_data() {
         var pc = document.getElementById('employee_id');
         var employee_id = $('#employee_id').val();
-        var item_code = $('#item_code').val();
+        var employee_name = $('#employee_name').val(); 
+        var item_code = $('#item_code').val(); 
+        var item_name = $('#item_description').val(); 
         var no_out = $('#no_out').val();
         var status = $('#status').val();
 
-        if (status != "OUT" && employee_id != "" && item_code != "") {
+        if (status != "OUT" && employee_id != "" && item_code != "" && employee_name != "" && item_name != "") {
             // $("#simpan").attr("disabled", "disabled");
             $.ajax({
                 url: "<?php echo base_url("Controller_Peminjaman/create_out_ajax"); ?>",
