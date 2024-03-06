@@ -8,6 +8,7 @@ class Controller_Peminjaman extends CI_Controller
         Parent::__construct();
         is_logged_in();
         $this->load->model('Model_Peminjaman', 'peminjaman');
+        $this->load->library('form_validation');
     }
 
 
@@ -285,32 +286,66 @@ class Controller_Peminjaman extends CI_Controller
 
     public function create_out_ajax()
     {
+        // date_default_timezone_set('Asia/Jakarta');
+        // $nox =  $this->peminjaman->buat_kode_no_out();
+        // $no_itemx = $this->input->post('item_code');
+        // $sqlx = $this->db->query("SELECT * FROM tb_items where item_code = '$no_itemx' ");
+        // $cek0 = $sqlx->row_array();
+
+        // if ($cek0['status'] == 0) {
+        //     $no_id = $this->input->post('employee_id');
+        //     $sql = $this->db->query("SELECT employee_id FROM tb_employee where employee_id = '$no_id' ");
+        //     $cek = $sql->num_rows();
+
+        //     $no_item = $this->input->post('item_code');
+        //     $sqlx = $this->db->query("SELECT item_code FROM tb_items where item_code = '$no_item' ");
+        //     $cek2 = $sqlx->num_rows();
+
+        //     $sqly = $this->db->query("SELECT * FROM tb_pinjam where employee_id = '$no_id' AND item_code = '$no_item' AND remark = 'PINJAM' ");
+        //     $cek3 = $sqly->num_rows();
+
+        //     if ($cek > 0  && $cek2 > 0 && $cek3 < 1) {
+        //         $data = [
+        //             'no_out' => $nox,
+        //             'dates' => date('Y-m-d H:i:s'),
+        //             'employee_id' => $this->input->post('employee_id'),
+        //             'item_code' => $this->input->post('item_code'),
+        //             'remark' => 'PINJAM',
+        //             'no_return' => '',
+        //             'date_ret' => ''
+        //         ];
+
+
+        //         $this->db->insert('tb_pinjam', $data);
+        //         $sukses = $this->db->affected_rows();
+
+        //         if ($sukses == 1) {
+
+        //             $item_code = $this->input->post('item_code');
+        //             $this->db->set('status', 1);
+        //             $this->db->where('item_code', $item_code);
+        //             $this->db->update('tb_items');
+        //         } 
+
+        //         echo json_encode(array(
+        //             "statusCode" => 200
+        //         ));
+        //     } 
+        // }
+
         date_default_timezone_set('Asia/Jakarta');
-
         $nox =  $this->peminjaman->buat_kode_no_out();
+        $status = $this->input->post('status');
 
+        if ($status !== "OUT") {
+            $emp_id = $this->input->post('employee_id');
+            $item_id = $this->input->post('item_code');
+            $sqly = $this->db->query("SELECT * FROM tb_pinjam where employee_id = '$emp_id' AND item_code = '$item_id' AND remark = 'PINJAM' ");
+            $this->db->limit(1);
+            $cek3 = $sqly->num_rows();
 
-        $no_itemx = $this->input->post('item_code');
-        $sqlx = $this->db->query("SELECT * FROM tb_items where item_code = '$no_itemx' ");
-        $cek0 = $sqlx->row_array();
-
-
-        if ($cek0['status'] == 0) {
-
-
-            $no_id = $this->input->post('employee_id');
-            $sql = $this->db->query("SELECT employee_id FROM tb_employee where employee_id = '$no_id' ");
-            $cek = $sql->num_rows();
-
-            $no_item = $this->input->post('item_code');
-            $sqlx = $this->db->query("SELECT item_code FROM tb_items where item_code = '$no_item' ");
-            $cek2 = $sqlx->num_rows();
-
-            if ($cek > 0  && $cek2 > 0) {
-
-
+            if ($cek3 < 1) {
                 $data = [
-
                     'no_out' => $nox,
                     'dates' => date('Y-m-d H:i:s'),
                     'employee_id' => $this->input->post('employee_id'),
@@ -318,7 +353,6 @@ class Controller_Peminjaman extends CI_Controller
                     'remark' => 'PINJAM',
                     'no_return' => '',
                     'date_ret' => ''
-
                 ];
 
 

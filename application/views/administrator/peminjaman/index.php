@@ -294,9 +294,9 @@
         }
     }
 
-    function simpanTime() {
-        timeout = setTimeout(simpan_data, 1000);
-    }
+    // function simpanTime() {
+    //     timeout = setTimeout(simpan_data, 2000);
+    // }
 
 
 
@@ -348,9 +348,6 @@
                             $('#item_code').val('');
                             $('#item_description').val('');
                             $('#status').val('');
-
-
-
 
 
                             $('#simpan').prop('disabled', true);
@@ -409,7 +406,7 @@
                     },
                     cache: false,
                     success: function(data) {
-                        console.log(data);
+                        // console.log(data);
                         $.each(data, function(employee_id, employee_name,
                             department, line, message) {
                             $('[name="employee_name"]').val(data.employee_name);
@@ -471,7 +468,7 @@
 
                         $('#simpan').prop('disabled', false);
                         // $('#simpan').click();
-                        simpanTime();
+                      simpan_data();
 
                     },
                     error: function() {
